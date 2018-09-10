@@ -442,7 +442,7 @@ public class ItemOneFragment extends Fragment {
         Toast.makeText(getContext(),"bott",Toast.LENGTH_SHORT).show();
         gate=true;
 
-        myReef.orderByKey().endAt(newestPostId).startAt(3).limitToLast(4).addChildEventListener(new ChildEventListener() {
+        myReef.endAt(newestPostId).orderByKey().addChildEventListener(new ChildEventListener() {
             //.startAt(oldesPostId)
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
