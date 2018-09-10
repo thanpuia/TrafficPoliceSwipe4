@@ -83,18 +83,18 @@ public class ItemOneFragment extends Fragment {
         temp1=temp2=true;
 
 
-        layoutManager = new LinearLayoutManager(getContext());
-        scrollListView = new ScrollListView(getContext());
+        layoutManager   = new LinearLayoutManager   (getContext());
+        scrollListView  = new ScrollListView        (getContext());
 
-        ListView listView= view.findViewById(R.id.listView);
+        ListView listView   = view.findViewById(R.id.listView);
         mSwipeRefreshLayout = view.findViewById(R.id.pullToRefresh);
 
-        dateList= new ArrayList<String>();
-        messageList= new ArrayList<String>();
-        adminList = new ArrayList<String>();
-        dateListTemp= new ArrayList<String>();
-        messageListTemp= new ArrayList<String>();
-        adminListTemp = new ArrayList<String>();
+        dateList        = new ArrayList<String>();
+        messageList     = new ArrayList<String>();
+        adminList       = new ArrayList<String>();
+        dateListTemp    = new ArrayList<String>();
+        messageListTemp = new ArrayList<String>();
+        adminListTemp   = new ArrayList<String>();
         //adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arrayList);
         //final CustomAdapter adapter = new CustomAdapter();
         listView.setAdapter(customAdapter);
@@ -140,13 +140,13 @@ public class ItemOneFragment extends Fragment {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
-                String admin = (String)dataSnapshot.child("admin").getValue();
-                String date = (String) dataSnapshot.child("date").getValue();
-                String message = (String) dataSnapshot.child("message").getValue();
+                String admin    = (String) dataSnapshot.child("admin")  .getValue();
+                String date     = (String) dataSnapshot.child("date")   .getValue();
+                String message  = (String) dataSnapshot.child("message").getValue();
 
-                adminList.add(0,admin);
-                dateList.add(0,date);
-                messageList.add(0,message);
+                adminList   .add(0,admin)   ;
+                dateList    .add(0,date)    ;
+                messageList .add(0,message) ;
 
                 customAdapter.notifyDataSetChanged();
 
@@ -334,12 +334,12 @@ public class ItemOneFragment extends Fragment {
         public View getView(int position, View convertView, ViewGroup parent) {
             convertView= getLayoutInflater().inflate(R.layout.list_details,null);
 
-            TextView textView_admin= convertView.findViewById(R.id.textview_admin);
-            TextView textView_date= convertView.findViewById(R.id.textview_date);
-            TextView textView_message= convertView.findViewById(R.id.textview_message);
+            TextView textView_admin     = convertView.findViewById(R.id.textview_admin);
+            TextView textView_date      = convertView.findViewById(R.id.textview_date);
+            TextView textView_message   = convertView.findViewById(R.id.textview_message);
 
-            textView_admin.setText(adminList.get(position));
-            textView_date.setText(dateList.get(position));
+            textView_admin  .setText(adminList  .get(position));
+            textView_date   .setText(dateList   .get(position));
             textView_message.setText(messageList.get(position));
             return convertView;
         }
@@ -446,13 +446,13 @@ public class ItemOneFragment extends Fragment {
             //.startAt(oldesPostId)
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                String adminTemp = (String)dataSnapshot.child("admin").getValue();
-                String dateTemp = (String) dataSnapshot.child("date").getValue();
-                String messageTemp = (String) dataSnapshot.child("message").getValue();
+                String adminTemp    = (String) dataSnapshot.child("admin")  .getValue();
+                String dateTemp     = (String) dataSnapshot.child("date")   .getValue();
+                String messageTemp  = (String) dataSnapshot.child("message").getValue();
 
-                adminListTemp.add(0,adminTemp);
-                dateListTemp.add(0,dateTemp);
-                messageListTemp.add(0,messageTemp);
+                adminListTemp.add  (0, adminTemp)  ;
+                dateListTemp.add   (0, dateTemp)   ;
+                messageListTemp.add(0, messageTemp);
                 /*
                  LISTTEMP A KA DAH CHAN CU, DATABASE A TANG A A LAK KHAN A TOP A TANG A LA THIN A,
                  A BOTTOM A TANG A DISPLAY KA DUH BAWK SIA. CCUVANG CUAN ARRYLIST AH A HARN IN KA HREM LEH A.
@@ -460,15 +460,14 @@ public class ItemOneFragment extends Fragment {
                 */
                 counter++;
                 if(counter==4){
-
                     for(int i=0;i<counter;i++){
                         if(i!=0){
-                            String admin = adminListTemp.get(i);
-                            String date = dateListTemp.get(i);
-                            String message = messageListTemp.get(i);
-                            adminList.add(admin);
-                            dateList.add(date);
-                            messageList.add(message);
+                            String admin    = adminListTemp     .get(i);
+                            String date     = dateListTemp      .get(i);
+                            String message  = messageListTemp   .get(i);
+                            adminList   .add(admin);
+                            dateList    .add(date);
+                            messageList .add(message);
                             customAdapter.notifyDataSetChanged();
                         }
                     }
@@ -479,13 +478,13 @@ public class ItemOneFragment extends Fragment {
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
-                String admin = (String)dataSnapshot.child("admin").getValue();
-                String date = (String) dataSnapshot.child("date").getValue();
-                String message = (String) dataSnapshot.child("message").getValue();
+                String admin    = (String) dataSnapshot.child("admin")  .getValue();
+                String date     = (String) dataSnapshot.child("date")   .getValue();
+                String message  = (String) dataSnapshot.child("message").getValue();
 
-                adminList.add(0,admin);
-                dateList.add(0,date);
-                messageList.add(0,message);
+                adminList   .add(0,admin);
+                dateList    .add(0,date);
+                messageList .add(0,message);
 
                 customAdapter.notifyDataSetChanged();
 

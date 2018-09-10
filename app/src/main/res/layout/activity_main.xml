@@ -7,12 +7,10 @@
     tools:context=".MainActivity"
     android:orientation="vertical">
 
-
     <FrameLayout
         android:id="@+id/frame_layout"
         android:layout_width="match_parent"
         android:layout_height="450dp">
-
     </FrameLayout>
 
     <LinearLayout
@@ -26,11 +24,7 @@
             android:layout_height="wrap_content"
             android:background="@color/navColor"
             app:menu="@menu/bottom_navigation_items"
-            android:animateLayoutChanges="false"
-
-            />
-
+            android:animateLayoutChanges="false" />
 
     </LinearLayout>
-
 </LinearLayout>
