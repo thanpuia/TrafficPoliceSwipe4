@@ -1,0 +1,86 @@
+{
+  "project_info": {
+    "project_number": "487289809038",
+    "firebase_url": "https://traffficpoliceswipe4.firebaseio.com",
+    "project_id": "traffficpoliceswipe4",
+    "storage_bucket": "traffficpoliceswipe4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:487289809038:android:a665a1f9ad6519f3",
+        "android_client_info": {
+          "package_name": "com.example.lalthanpuia.trafficpoliceswipe4"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "487289809038-3euv0f0nrvqunva8j67mh7eoec4u2gau.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.lalthanpuia.trafficpoliceswipe4",
+            "certificate_hash": "fb644a74bc8e83a6c42ad719bf56d8459060cc23"
+          }
+        },
+        {
+          "client_id": "487289809038-v8tdfqhmsh1443qnat6qfcii8d2v1tbp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwd3zMUt0HTGC92bVyt_1-YaNOZVkGev4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "487289809038-v8tdfqhmsh1443qnat6qfcii8d2v1tbp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:487289809038:android:cb28c1f7b04f51b8",
+        "android_client_info": {
+          "package_name": "com.example.lalthanpuia.trafficpoliceswipe5"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "487289809038-v8tdfqhmsh1443qnat6qfcii8d2v1tbp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwd3zMUt0HTGC92bVyt_1-YaNOZVkGev4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,83 @@
+// fire base a connect thei tawng2 na back up
+
+package com.example.lalthanpuia.trafficpoliceswipe4;
+
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.Map;
+
+public class MainActivity extends AppCompatActivity {
+
+    public static final String FIREBASE_USERNAME = "thanpuia46@gmail.com";
+    public static final String FIREBASE_PASSWORD = "Lorenzo@99";
+
+    private FirebaseAuth mAuth;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myReef = database.getReference();
+
+        //Read from the database
+        myReef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+
+           //     String value = dataSnapshot.getValue(String.class);
+              //  Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
+               // Toast.makeText(getApplicationContext(),  value,Toast.LENGTH_SHORT).show();
+                //Log.d("TAG", "Value is: " + value);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+             ////   Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
+    }
+
+    private void updateUI(FirebaseUser user) {
+
+    }
+
+    public void ButtonClick(View view) {
+       // DatabaseReference mdatabase = FirebaseDatabase.getInstance().getReference("traffficpoliceswipe4");
+        //DatabaseReference myReef = mdatabase.child("traffficpoliceswipe4/gfdg");
+
+        // Write a message to the database
+
+      //  mdatabase.child("gfdg").setValue("happy Monday!");
+       // myReef.setValue("Hello, World!");
+        // Write a message to the database
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference();
+
+        //myRef.setValue("Hello, World!");
+
+        myRef.push().setValue("33");
+    }
+
+
+}
