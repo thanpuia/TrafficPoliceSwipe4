@@ -28,13 +28,15 @@ import com.google.firebase.database.ValueEventListener;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 
+
 import java.util.ArrayList;
+
 
 /**
  * A simple {@link Fragment} subclass.
  */
-
 public class ItemOneFragment extends Fragment {
+
 
     private ArrayList<String> dateList,messageList,adminList,dateListTemp,messageListTemp,adminListTemp;
     FirebaseDatabase database;
@@ -67,6 +69,13 @@ public class ItemOneFragment extends Fragment {
         // Required empty public constructor
     }
 
+//    @Override
+//    public void onSaveInstanceState(Bundle outState) {
+//        super.onSaveInstanceState(outState);
+//
+//    }
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -98,6 +107,33 @@ public class ItemOneFragment extends Fragment {
         });
         database = FirebaseDatabase.getInstance();
         myReef = database.getReference("notifications");
+
+
+
+        //A RESHERH LEH LIST CU A DIK A MHS, BLANK DATA A LA
+        /*myReef.limitToFirst(5).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                    oldestPostId = child.getKey();
+
+                    String admin = (String)dataSnapshot.child("admin").getValue();
+                    String date = (String) dataSnapshot.child("date").getValue();
+                    String message = (String) dataSnapshot.child("message").getValue();
+
+                    adminList.add(0,admin);
+                    dateList.add(0,date);
+                    messageList.add(0,message);
+
+                    customAdapter.notifyDataSetChanged();
+                }
+
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });*/
 
         myReef.orderByKey().limitToLast(5).addChildEventListener(new ChildEventListener() {
             //.startAt(oldesPostId)
@@ -199,6 +235,15 @@ public class ItemOneFragment extends Fragment {
             }
         });
 
+//        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                doSomething();
+//                mSwipeRefreshLayout.setRefreshing(false);
+//
+//            }
+//        });
+
         mSwipeRefreshLayout.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh(SwipyRefreshLayoutDirection direction) {
@@ -213,6 +258,54 @@ public class ItemOneFragment extends Fragment {
                 }
                 }
         });
+/*
+        //A NODE ZONG A LA TAWP
+        myReef.addChildEventListener(new ChildEventListener() {
+
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                String admin = (String)dataSnapshot.child("admin").getValue();
+                String date = (String) dataSnapshot.child("date").getValue();
+                String message = (String) dataSnapshot.child("message").getValue();
+
+                adminList.add(0,admin);
+                dateList.add(0,date);
+                messageList.add(0,message);
+
+                customAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                String admin = (String)dataSnapshot.child("admin").getValue();
+                String date = (String) dataSnapshot.child("date").getValue();
+                String message = (String) dataSnapshot.child("message").getValue();
+
+                adminList.add(0,admin);
+                dateList.add(0,date);
+                messageList.add(0,message);
+
+                customAdapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });*/
 
         return view;
     }
@@ -240,7 +333,7 @@ public class ItemOneFragment extends Fragment {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             convertView= getLayoutInflater().inflate(R.layout.list_details,null);
-                                                           
+
             TextView textView_admin     = convertView.findViewById(R.id.textview_admin);
             TextView textView_date      = convertView.findViewById(R.id.textview_date);
             TextView textView_message   = convertView.findViewById(R.id.textview_message);
@@ -252,23 +345,49 @@ public class ItemOneFragment extends Fragment {
         }
     }
 
+
     private void doSomething() {
 
-        adminList   .clear();
-        dateList    .clear();
-        messageList .clear();
+       /* myReef.orderByKey().startAt(oldestPostId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot child: dataSnapshot.getChildren()) {
+
+                    String admin = (String)dataSnapshot.child("admin").getValue();
+                    String date = (String) dataSnapshot.child("date").getValue();
+                    String message = (String) dataSnapshot.child("message").getValue();
+
+                    adminList.add(0,admin);
+                    dateList.add(0,date);
+                    messageList.add(0,message);
+
+                    customAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });*/
+
+        adminList.clear();
+        dateList.clear();
+        messageList.clear();
+
 
         myReef.orderByKey().limitToLast(5).addChildEventListener(new ChildEventListener() {
+//.startAt(oldesPostId)
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
-                String admin    = (String) dataSnapshot.child("admin")  .getValue();
-                String date     = (String) dataSnapshot.child("date")   .getValue();
-                String message  = (String) dataSnapshot.child("message").getValue();
+                String admin = (String)dataSnapshot.child("admin").getValue();
+                String date = (String) dataSnapshot.child("date").getValue();
+                String message = (String) dataSnapshot.child("message").getValue();
 
-                adminList   .add(0,admin)   ;
-                dateList    .add(0,date)    ;
-                messageList .add(0,message) ;
+                adminList.add(0,admin);
+                dateList.add(0,date);
+                messageList.add(0,message);
 
                 customAdapter.notifyDataSetChanged();
 
@@ -307,14 +426,24 @@ public class ItemOneFragment extends Fragment {
 
             }
         });
+
     }
 
-    public void bottomrefresh(){
+//    @Override
+//    public void onSaveInstanceState(Bundle outState) {
+//
+//        outState.putStringArrayList("admin",adminList);
+//        outState.putStringArrayList("date",dateList);
+//        outState.putStringArrayList("message",messageList);
+//        super.onSaveInstanceState(outState);
+//    }
 
+    public void bottomrefresh(){
         Toast.makeText(getContext(),"bott",Toast.LENGTH_SHORT).show();
         gate=true;
 
         myReef.endAt(newestPostId).orderByKey().addChildEventListener(new ChildEventListener() {
+            //.startAt(oldesPostId)
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 String adminTemp    = (String) dataSnapshot.child("admin")  .getValue();
