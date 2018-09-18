@@ -12,12 +12,14 @@
         android:id="@+id/pullToRefresh"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srl_direction="both">
+        app:srl_direction="top">
 
-        <ListView
-            android:id="@+id/listView"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:scrollbars="vertical "
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"/>
+
 
     </com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout>
 
