@@ -1,0 +1,298 @@
+package com.example.lalthanpuia.trafficpoliceswipe4;
+
+
+import android.app.Application;
+import android.app.Notification;
+import android.app.ProgressDialog;
+import android.os.Bundle;
+import android.os.Parcelable;
+import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import static android.support.v7.widget.RecyclerView.*;
+
+/**
+ * A simple {@link Fragment} subclass.
+ */
+
+public class ItemOneFragment extends Fragment {
+
+    public EndlessRecyclerViewScrollListener scrollListener;
+    private ItemOneFragmentAdapter itemOneFragmentAdapter;
+    RecyclerView mRecyclerView ;
+    Adapter mAdapter;
+    LinearLayoutManager linearLayoutManager;
+    private String[] admin;
+    private String[] date;
+    private String[] message;
+    private String startAt;
+    private String endAt;
+    private String startAtKey;
+
+    public ArrayList<String> arrayList_Admin;
+    public ArrayList<String> arrayList_Date;
+    public ArrayList<String> arrayList_Message;
+
+    FirebaseDatabase database;
+    DatabaseReference myReef;
+    DataSnapshot specialDataSnapshot;
+
+    SwipeRefreshLayout swipeRefreshLayout;
+
+    Boolean gate = true;
+    Boolean gate_scroll = true;
+
+    public static ItemOneFragment newInstance() {
+        ItemOneFragment fragment = new ItemOneFragment();
+        return fragment;
+    }
+
+    public ItemOneFragment() {
+        // Required empty public constructor
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view =inflater.inflate(R.layout.fragment_item_one, container, false);
+
+        /*admin = new String[]{"apple","brilliant","curious","dare"};
+        date = new String[]{"Dpple","Dbrilliant","Dcurious","Ddare"};
+        message = new String[]{"Mapple","Mbrilliant","Mcurious","Mdare"};*/
+        admin = new String[]{};
+        date = new String[]{};
+        message = new String[]{};
+
+        database = FirebaseDatabase.getInstance();
+        myReef = database.getReference("notifications");
+
+        arrayList_Admin = new ArrayList<>(Arrays.asList(admin));
+        arrayList_Date = new ArrayList<>(Arrays.asList(date));
+        arrayList_Message = new ArrayList<>(Arrays.asList(message));
+        swipeRefreshLayout = view.findViewById(R.id.pullToRefresh);
+
+        mRecyclerView = view.findViewById(R.id.recyclerView);
+        linearLayoutManager = new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false);
+        mRecyclerView.setLayoutManager(linearLayoutManager);
+
+        linearLayoutManager= (LinearLayoutManager) mRecyclerView.getLayoutManager();
+          final int visibleItemCount =
+                linearLayoutManager.findLastVisibleItemPosition() - linearLayoutManager.findFirstVisibleItemPosition();
+        mRecyclerView.addOnScrollListener(new OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+             //   Toast.makeText(getContext(), "Visible Item Count" + visibleItemCount, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        mAdapter = new ItemOneFragmentAdapter(arrayList_Admin,arrayList_Date,arrayList_Message);
+        mRecyclerView.setAdapter(mAdapter);
+
+
+        //DATA INITIAL DOWNLOAD
+
+        myReef.orderByValue().limitToLast(5).addChildEventListener(new ChildEventListener() {
+       // myReef.orderByKey().endAt("-LKeiLyWx8bT4a6hQMPr").limitToLast(2).addChildEventListener(new ChildEventListener() {
+       // myReef.orderByKey().startAt("-LKeiLyWx8bT4a6hQMPr").limitToFirst(2).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                String adminTemp    = (String) dataSnapshot.child("admin")  .getValue();
+                String dateTemp     = (String) dataSnapshot.child("date")   .getValue();
+                String messageTemp  = (String) dataSnapshot.child("message").getValue();
+
+                arrayList_Admin.add(0,adminTemp);
+                arrayList_Date.add(0,dateTemp);
+                arrayList_Message.add(0,messageTemp);
+
+                /*ArrayList<String> arrayList_adminTemp = new ArrayList(){};
+                ArrayList<String> arrayList_dateTemp = new ArrayList(){};
+                ArrayList<String> arrayList_messageTemp = new ArrayList(){};
+               */
+
+                //startAt = dataSnapshot.getKey();
+                if(gate == true){
+                    endAt = dataSnapshot.getKey();
+                    gate = false;
+                }
+
+                // linearLayoutManager.setReverseLayout(true);
+                mAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        //DATA DOWNLOAD ON REFRESH
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                arrayList_Admin.clear();
+                arrayList_Date.clear();
+                arrayList_Message.clear();
+                myReef.orderByKey().limitToLast(4).addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                        String adminTemp    = (String) dataSnapshot.child("admin")  .getValue();
+                        String dateTemp     = (String) dataSnapshot.child("date")   .getValue();
+                        String messageTemp  = (String) dataSnapshot.child("message").getValue();
+
+
+                        arrayList_Admin.add(0,adminTemp);
+                        arrayList_Date.add(0,dateTemp);
+                        arrayList_Message.add(0,messageTemp);
+
+                        mAdapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+                swipeRefreshLayout.setRefreshing(false);
+
+            }
+        });
+
+        //DATA DOWNLOAD ON SCROLL
+        mRecyclerView.addOnScrollListener(new OnScrollListener(){
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+                if (!recyclerView.canScrollVertically(1)) {
+                    Toast.makeText(getContext(), "Last", Toast.LENGTH_LONG).show();
+
+                  /*  myReef.orderByValue().limitToLast(4).endAt(endAt).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            String adminTemp    = (String) dataSnapshot.child("admin")  .getValue();
+                            String dateTemp     = (String) dataSnapshot.child("date")   .getValue();
+                            String messageTemp  = (String) dataSnapshot.child("message").getValue();
+
+                            arrayList_Admin.add(0,adminTemp);
+                            arrayList_Date.add(0,dateTemp);
+                            arrayList_Message.add(0,messageTemp);
+
+                            //startAt = dataSnapshot.getKey();
+                            // endAt = dataSnapshot.getKey();
+                            mAdapter.notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });*/
+
+                    //myReef.orderByValue().endAt(endAt).limitToLast(3).addChildEventListener(new ChildEventListener() {
+                  //  myReef.orderByValue().endAt(endAt).addChildEventListener(new ChildEventListener() {
+                     myReef.orderByKey().endAt(endAt).limitToLast(3).addChildEventListener(new ChildEventListener() {
+                        @Override
+                        public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                            String adminTemp    = (String) dataSnapshot.child("admin")  .getValue();
+                            String dateTemp     = (String) dataSnapshot.child("date")   .getValue();
+                            String messageTemp  = (String) dataSnapshot.child("message").getValue();
+
+                            arrayList_Admin.add(adminTemp);
+                            arrayList_Date.add(dateTemp);
+                            arrayList_Message.add(messageTemp);
+                            if(gate_scroll == true){
+                                endAt = dataSnapshot.getKey();
+                                gate_scroll = false;
+                            }
+                            //startAt = dataSnapshot.getKey();
+                           // endAt = dataSnapshot.getKey();
+                           // linearLayoutManager.setReverseLayout(true);
+                            mAdapter.notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                        }
+
+                        @Override
+                        public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+                        }
+
+                        @Override
+                        public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+            }
+        });
+
+
+        return view;
+    }
+}

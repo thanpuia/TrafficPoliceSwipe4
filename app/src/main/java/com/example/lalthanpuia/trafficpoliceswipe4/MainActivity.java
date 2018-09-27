@@ -1,6 +1,8 @@
 package com.example.lalthanpuia.trafficpoliceswipe4;
 
+import android.content.Intent;
 import android.provider.ContactsContract;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
@@ -20,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
     BottomNavigationViewHelper bottomNavigationViewHelper;
 
+    private static final int CAMERA_REQUEST = 123;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,8 +53,11 @@ public class MainActivity extends AppCompatActivity {
                     transaction.replace(R.id.frame_layout,itemTwoFragment);
                     break;
                 case R.id.action_item3:
-                    itemThreeFragment = ItemThreeFragment.newInstance();
-                    transaction.replace(R.id.frame_layout,itemThreeFragment);
+                  /*  itemThreeFragment = ItemThreeFragment.newInstance();
+                    transaction.replace(R.id.frame_layout,itemThreeFragment);*/
+                  Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                  startActivityForResult(intent, CAMERA_REQUEST);
+
                     break;
                 case R.id.action_item4:
                     itemFourFragment = ItemFourFragment.newInstance();
@@ -59,10 +65,15 @@ public class MainActivity extends AppCompatActivity {
                     break;
 
             }
+
             transaction.commit();
+
             return true;
+
         }
     });
+
+
 
     //MANUALLY DISPLAY THE FIRST FRAGMENT ONLY OE TIME
     FragmentTransaction tempTtransaction = getSupportFragmentManager().beginTransaction();
