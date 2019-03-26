@@ -1,15 +1,31 @@
 package com.example.lalthanpuia.trafficpoliceswipe4;
 
+import android.Manifest;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+
+import com.example.lalthanpuia.trafficpoliceswipe4.signing.GoogleSignIn;
+
+import es.dmoral.toasty.Toasty;
+
+//import com.google.android.gms.location.LocationManager;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -17,68 +33,94 @@ public class MainActivity extends AppCompatActivity {
     public static final String FIREBASE_USERNAME = "thanpuia46@gmail.com";
     public static final String FIREBASE_PASSWORD = "Lorenzo@99";
     boolean Status = true;
-    boolean unique ;
+    boolean unique;
 
     BottomNavigationView bottomNavigationView;
     BottomNavigationViewHelper bottomNavigationViewHelper;
+    public static LocationListener locationListener;
 
     private static final int CAMERA_REQUEST = 123;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         bottomNavigationView = findViewById(R.id.navigation);
         BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
 
         bottomNavigationView.setOnNavigationItemSelectedListener
                 (new BottomNavigationView.OnNavigationItemSelectedListener() {
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-            ItemOneFragment itemOneFragment = null;
-            ItemTwoFragment itemTwoFragment = null;
-            ItemThreeFragment itemThreeFragment = null;
-            ItemFourFragment itemFourFragment = null;
+                        ItemOneFragment itemOneFragment = null;
+                        ItemTwoFragment itemTwoFragment = null;
+                        ItemThreeFragment itemThreeFragment = null;
+                        ItemFourFragment itemFourFragment = null;
 
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                        ItemFiveFragment itemFiveFragment = null;
 
-            switch (item.getItemId()){
-                case R.id.action_item1:
-                    itemOneFragment = ItemOneFragment.newInstance();
-                    transaction.replace(R.id.frame_layout,itemOneFragment);
-                    break;
-                case R.id.action_item2:
-                    itemTwoFragment = ItemTwoFragment.newInstance();
-                    transaction.replace(R.id.frame_layout,itemTwoFragment);
-                    break;
-                case R.id.action_item3:
+
+                        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+                        switch (item.getItemId()) {
+                            case R.id.action_item1:
+                                itemOneFragment = ItemOneFragment.newInstance();
+                                transaction.replace(R.id.frame_layout, itemOneFragment);
+                                break;
+                            case R.id.action_item2:
+                                itemTwoFragment = ItemTwoFragment.newInstance();
+                                transaction.replace(R.id.frame_layout, itemTwoFragment);
+                                break;
+                            case R.id.action_item3:
                   /*  itemThreeFragment = ItemThreeFragment.newInstance();
                     transaction.replace(R.id.frame_layout,itemThreeFragment);*/
-                  Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                  startActivityForResult(intent, CAMERA_REQUEST);
+                                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                                startActivityForResult(intent, CAMERA_REQUEST);
 
-                    break;
-                case R.id.action_item4:
-                    itemFourFragment = ItemFourFragment.newInstance();
-                    transaction.replace(R.id.frame_layout,itemFourFragment);
-                    break;
-
-            }
-
-            transaction.commit();
-
-            return true;
-
-        }
-    });
+                                break;
+                            case R.id.action_item4:
+                                // itemFourFragment = ItemFourFragment.newInstance();
+                                // transaction.replace(R.id.frame_layout,itemFourFragment);
+                                Intent intent1 = new Intent(getApplicationContext(), ItemFiveActivity.class);
+                                startActivity(intent1);
 
 
+                                break;
 
-    //MANUALLY DISPLAY THE FIRST FRAGMENT ONLY OE TIME
-    FragmentTransaction tempTtransaction = getSupportFragmentManager().beginTransaction();
-        tempTtransaction.replace(R.id.frame_layout,ItemOneFragment.newInstance());
+                        }
+
+                        transaction.commit();
+
+                        return true;
+
+                    }
+                });
+
+
+        //MANUALLY DISPLAY THE FIRST FRAGMENT ONLY OE TIME
+        FragmentTransaction tempTtransaction = getSupportFragmentManager().beginTransaction();
+        tempTtransaction.replace(R.id.frame_layout, ItemOneFragment.newInstance());
         tempTtransaction.commit();
+
+
+    }
+
+
+    public void logoutClick(View view) {
+        try {
+
+            GoogleSignIn.mAuth.signOut();
+            Intent intent = new Intent(this, GoogleSignIn.class);
+            startActivity(intent);
+
+        } catch (Exception e) {
+            Toasty.error(this,"Somethings wrong");
+
+            e.printStackTrace();
+        }
+    }
+}
 //    ListView listView;
 //    ArrayList<String> arrayList,dateList,messageList;
 //   // ArrayAdapter<String> adapter;
@@ -162,7 +204,7 @@ public class MainActivity extends AppCompatActivity {
 //
 //            }
 //        });
-    }
+   // }
 
 //    private void updateUI(FirebaseUser user) {
 //
@@ -203,4 +245,4 @@ public class MainActivity extends AppCompatActivity {
 //            return convertView;
 //        }
 //    }
-}
+//}

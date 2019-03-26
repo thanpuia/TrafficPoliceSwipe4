@@ -14,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-
+<!--
             <EditText
                 android:id="@+id/et_admin"
                 android:layout_width="wrap_content"
@@ -25,7 +25,7 @@
                 android:id="@+id/et_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="date"/>
+                android:hint="date"/>-->
 
             <EditText
                 android:id="@+id/et_message"
@@ -54,6 +54,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Upload" />
+
 
             <ImageView
                 android:id="@+id/imgView"

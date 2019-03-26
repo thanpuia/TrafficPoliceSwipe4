@@ -6,7 +6,7 @@ import android.widget.AbsListView;
 import android.widget.ListView;
 
 
-/**
+/** I THINK I DONT USE THIS
  * Triggers a event when scrolling reaches bottom.
  *
  * Created by martinsandstrom on 2013-05-02.

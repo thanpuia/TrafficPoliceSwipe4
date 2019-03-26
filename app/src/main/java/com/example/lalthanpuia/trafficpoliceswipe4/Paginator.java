@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
@@ -31,14 +32,11 @@ public class Paginator {
     private boolean isLoading = false;
     private boolean hasLoadedAll = false;
     private int nextPage;
+    int NUM_LOAD_INDEX = 10;
 
     FirebaseDatabase database;
     DatabaseReference myRef;
     DataSnapshot specialDataSnapshot;
-
-    ArrayList<String> admin_arrayList;
-    ArrayList<String> date_arrayList;
-    ArrayList<String> message_arrayList;
 
     Long startAt;
     String lastKey;
@@ -47,7 +45,7 @@ public class Paginator {
     boolean firstPageLoaded = false;
 
 
-    public Paginator(Context c, PullToLoadView pullToLoadView) {
+    public Paginator(final Context c, PullToLoadView pullToLoadView) {
         this.c = c;
         this.pullToLoadView = pullToLoadView;
 
@@ -55,18 +53,26 @@ public class Paginator {
         RecyclerView rv=pullToLoadView.getRecyclerView();
         rv.setLayoutManager(new LinearLayoutManager(c, LinearLayoutManager.VERTICAL,false));
 
-        admin_arrayList = new ArrayList<>();
-        date_arrayList = new ArrayList<>();
-        message_arrayList = new ArrayList<>();
+//        admin_arrayList = new ArrayList<>();
+//        date_arrayList = new ArrayList<>();
+//        message_arrayList = new ArrayList<>();
         //adminTemp = new String();
 
        // adapter=new MyAdapter(c,new ArrayList<String>());
-        adapter=new MyAdapter(c,new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>());
+
+
+        adapter=new MyAdapter(c,new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>());
         rv.setAdapter(adapter);
 
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference("notifications");
 
+        rv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(c,"click"+view.toString(),Toast.LENGTH_SHORT).show();
+            }
+        });
         initializePaginator();
     }
 
@@ -115,8 +121,6 @@ public class Paginator {
         pullToLoadView.initLoad();
     }
 
-
-
     //LOAD NEW DATA ON REFRESH !
 
     /*
@@ -126,6 +130,7 @@ public class Paginator {
 
     public void loadData(final int page)
     {
+        //adapter.clear();
         Log.i("LOADMORE/PAGE",""+page);
         if(firstPageLoaded && page==1){
             return;
@@ -137,10 +142,10 @@ public class Paginator {
         Query ref1;
         if(page == 1) {
             Log.i("LOADMORE/INITIAL","load");
-            ref1 = myRef.orderByChild("sortkey").limitToFirst(4);
+            ref1 = myRef.orderByChild("sortkey").limitToFirst(NUM_LOAD_INDEX);
         } else {
             Log.i("LOADMORE/NEW", "START " + startAt);
-            ref1 = myRef.orderByChild("sortkey").startAt(startAt).limitToFirst(4);
+            ref1 = myRef.orderByChild("sortkey").startAt(startAt).limitToFirst(NUM_LOAD_INDEX);
         }
 
         ref1.addChildEventListener(new ChildEventListener() {
@@ -155,15 +160,29 @@ public class Paginator {
                 String dateTemp     = (String) dataSnapshot.child("date")   .getValue();
                 String messageTemp  = (String) dataSnapshot.child("message").getValue();
 
-//                admin_arrayList.add(adminTemp);
-//                date_arrayList.add(dateTemp);
-//                message_arrayList.add(messageTemp);
+                String downloadURL = (String)  dataSnapshot.child("downloadURL").getValue();
 
-                  adapter.add(adminTemp, dateTemp, messageTemp);
-                  adapter.notifyDataSetChanged();
-//                counter++;
+                String latitude = (String)     dataSnapshot.child("latitude").getValue();
+                String longitude = (String)    dataSnapshot.child("longitude").getValue();
+
+                String userUniqueKey = String.valueOf(dataSnapshot.child("user_id").getValue());
+
+
+
                 lastKey = dataSnapshot.getKey();
+
+                String uniqueKey = lastKey;
+
+                //messageTemp = messageTemp+" \n"+latitude+" "+longitude;
+////                admin_arrayList.add(adminTemp);
+////                date_arrayList.add(dateTemp);
+////                message_arrayList.add(messageTemp);
+//
+                adapter.add(adminTemp, dateTemp, messageTemp, downloadURL, latitude, longitude, uniqueKey, userUniqueKey);
+                adapter.notifyDataSetChanged();
+//                counter++;
                 startAt = (Long) dataSnapshot.child("sortkey").getValue();
+
 
 
             }
@@ -202,12 +221,12 @@ public class Paginator {
             }
         },1500);
     }
-    public void loadNewData(){
+  /*  public void loadNewData(){
 
         isLoading = true;
         Log.i("LOADMORE/NEW", "START " + startAt);
 
-        myRef.orderByChild("sortkey").startAt(startAt).limitToFirst(4).addChildEventListener(new ChildEventListener() {
+        myRef.orderByChild("sortkey").startAt(startAt).limitToFirst(NUM_LOAD_INDEX).addChildEventListener(new ChildEventListener() {
 
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -215,13 +234,19 @@ public class Paginator {
                 String dateTemp     = (String) dataSnapshot.child("date")   .getValue();
                 String messageTemp  = (String) dataSnapshot.child("message").getValue();
 
-                adapter.add(adminTemp, dateTemp, messageTemp);
+                String downloadURL = (String) dataSnapshot.child("downloadURL").getValue();
+
+                String latitude = (String) dataSnapshot.child("latitude").getValue();
+                String longitude = (String)dataSnapshot.child("longitude").getValue();
+               // messageTemp = messageTemp+"\n "+latitude+" "+longitude;
+
+                adapter.add(adminTemp, dateTemp, messageTemp, downloadURL, latitude, longitude);
                 adapter.notifyDataSetChanged();
 
 //                admin_arrayList.add(adminTemp);
 //                date_arrayList.add(dateTemp);
 //                message_arrayList.add(messageTemp);
-                //  adapter.add(admin_arrayList,date_arrayList,message_arrayList);
+//               adapter.add(admin_arrayList,date_arrayList,message_arrayList);
 
 //                counter++;
      //           startAt = dataSnapshot.getKey();
@@ -263,6 +288,6 @@ public class Paginator {
                 isLoading=false;
                // nextPage=page+1;
             }
-        },1500);
-    }
+        },1200);
+    }*/
 }

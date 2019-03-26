@@ -1,15 +1,30 @@
 package com.example.lalthanpuia.trafficpoliceswipe4;
 
 
+import android.Manifest;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +33,18 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.lalthanpuia.trafficpoliceswipe4.signing.GoogleSignIn;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResult;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
@@ -28,34 +55,55 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.UUID;
 
+
 import static android.app.Activity.RESULT_OK;
+import static android.content.Context.LOCATION_SERVICE;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ItemTwoFragment extends Fragment {
+public class ItemTwoFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, ActivityCompat.OnRequestPermissionsResultCallback {
+    private static final String TAG = "MyApps-Location2";
 
-    EditText et_admin,et_date,et_message;
-    Button button,chooseImg,upload;
-    private int admin=0;
-    private int date = 100;
-    private int message = 500;
+    GoogleApiClient mGoogleApiClient;
+
+    private LocationRequest locationRequest;
+
+    EditText et_admin, et_date, et_message;
+    Button button, chooseImg, upload;
     private ImageView imageView;
     private Uri filePath;
     FirebaseStorage storage;
     StorageReference storageReference;
-
+    public static String pictureUrl;
+    long timestamp;
+    DatabaseReference database;
+    public static LocationManager locationManager;
+    public static LocationListener locationListener;
+    SimpleDateFormat sdf;
     private final int PICK_IMAGE_REQUEST = 71;
     private static final int CAMERA_REQUEST = 123;
 
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
+
+    String shared_userUniqueKey;
+    String shared_fullName;
+    String shared_email;
+    String shared_phone;
+
+    String newKey;
     public static ItemTwoFragment newInstance() {
         ItemTwoFragment fragment = new ItemTwoFragment();
         return fragment;
     }
-
 
     public ItemTwoFragment() {
         // Required empty public constructor
@@ -64,68 +112,65 @@ public class ItemTwoFragment extends Fragment {
 
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-         View view =inflater.inflate(R.layout.fragment_item_two, container, false);
+        View view = inflater.inflate(R.layout.fragment_item_two, container, false);
+        pictureUrl = "images/" + UUID.randomUUID().toString();
 
-        et_admin = view.findViewById(R.id.et_admin);
-        et_date = view.findViewById(R.id.et_date);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+
+        //GETTING THE SHARED PREFERENCES:
+        shared_userUniqueKey = sharedPreferences.getString("userUniqueKey","");
+        shared_fullName = sharedPreferences.getString("fullName","");
+        shared_email = sharedPreferences.getString("email","");
+        shared_phone = sharedPreferences.getString("phone","");
+
+        Log.d("TAG","ItemTwoFragment/mAuth:"+ sharedPreferences.getString("fullName", null));
+
+        mGoogleApiClient = new GoogleApiClient.Builder(getContext())
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API).build();
+
+        LocationRequest mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(10000);
+        mLocationRequest.setFastestInterval(5000);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+                .addLocationRequest(mLocationRequest);
+        PendingResult<LocationSettingsResult> result = LocationServices.SettingsApi
+                .checkLocationSettings(mGoogleApiClient, builder.build());
+        mGoogleApiClient.connect();
+
+       /* et_admin = view.findViewById(R.id.et_admin);
+        et_date = view.findViewById(R.id.et_date);*/
         et_message = view.findViewById(R.id.et_message);
         button = view.findViewById(R.id.button);
         chooseImg = view.findViewById(R.id.chooseImage);
         upload = view.findViewById(R.id.upload);
         imageView = view.findViewById(R.id.imgView);
+        database = FirebaseDatabase.getInstance().getReference();
+
+        // get the current date and time in human readable format
+        sdf = new SimpleDateFormat("HH:mm dd,MMMM", Locale.ENGLISH);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DatabaseReference database = FirebaseDatabase.getInstance().getReference();
 
 
-                //   for(int i=0; i<10;i++){
-                    admin++;
-                    date++;
-                    message++;
+               updateIntoAdminNotification();
+               updateIntoUserAccount();
 
-                    String s_admin = String.valueOf("admin- "+admin);
-                    String s_date = String.valueOf("date: "+date);
-                    String s_message = String.valueOf("message: "+message);
-
-                    String newKey = database.child("notifications").push().getKey();
-                    database.child("notifications/" + newKey).child("admin").setValue(s_admin);
-                    database.child("notifications/" + newKey).child("date").setValue(s_date);
-                    database.child("notifications/" + newKey).child("message").setValue(s_message);
-           //     }
-
-
-
-
-                String admin = String.valueOf(et_admin.getText());
-                String date = String.valueOf(et_date.getText());
-                String message = String.valueOf(et_message.getText());
-
-                if(admin!=null && date!=null &&message !=null){
-
-                   // String newKey = database.child("notifications").push().getKey();
-                    database.child("notifications/" + newKey).child("admin").setValue(admin);
-                    database.child("notifications/" + newKey).child("date").setValue(date);
-                    database.child("notifications/" + newKey).child("message").setValue(message);
-                }else{
-                    Toast.makeText(getContext(), "Enter all field", Toast.LENGTH_SHORT).show();
-                }
-
-                et_admin.setText("");
-                et_date.setText("");
-                et_message.setText("");
             }
         });
         
         chooseImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 chooseImage();
 
             }
@@ -140,6 +185,66 @@ public class ItemTwoFragment extends Fragment {
 
       // myRef.push().setValue("33");
         return view;
+    }
+
+
+
+    private void updateIntoAdminNotification() {
+        String currentDateandTime = sdf.format(new Date());
+
+        newKey = database.child("notifications").push().getKey();
+
+        String message = String.valueOf(et_message.getText());
+
+        if (message.equals("")) { Toast.makeText(getContext(), "Enter something", Toast.LENGTH_SHORT).show();
+        } else {
+            database.child("notifications/" + newKey).child("admin").setValue("admin");
+            database.child("notifications/" + newKey).child("date").setValue(currentDateandTime);
+            database.child("notifications/" + newKey).child("message").setValue(message);
+
+            timestamp = System.currentTimeMillis() / -1000;
+            database.child("notifications/" + newKey).child("sortkey").setValue(timestamp);
+
+            //WITH PIC OR WITHOUT PIC CHECKER
+            //Pic Embedded
+            if (filePath != null) {
+                database.child("notifications/" + newKey).child("downloadURL").setValue(pictureUrl);
+            }
+
+            //pic not Embedded
+            if (filePath == null) {
+                database.child("notifications/" + newKey).child("downloadURL").setValue("0");
+            }
+
+            //GETTING THE LOCATION
+
+            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
+            Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+
+            database.child("notifications/" + newKey).child("latitude").setValue(String.valueOf(lastLocation.getLatitude()));
+            database.child("notifications/" + newKey).child("longitude").setValue(String.valueOf(lastLocation.getLongitude()));
+            database.child("notifications/" + newKey).child("altitude").setValue(String.valueOf(lastLocation.getAltitude()));
+            database.child("notifications/" + newKey).child("accuracy").setValue(String.valueOf(lastLocation.getAccuracy()));
+
+        }
+        // CLEAR THE FIELD
+        et_message.setText("");
+
+    }
+
+    private void updateIntoUserAccount() {
+
+        String newPostUniqueKey = database.child("user_details/post").push().getKey();
+        database.child("user_details/"+shared_userUniqueKey+"/post").child(newPostUniqueKey).setValue(newKey);
     }
 
 
@@ -175,7 +280,8 @@ public class ItemTwoFragment extends Fragment {
             progressDialog.setTitle("Uploading...");
             progressDialog.show();
 
-            StorageReference ref = storageReference.child("images/"+ UUID.randomUUID().toString());
+            //pictureUrl = "images" + UUID.randomUUID().toString();
+            StorageReference ref = storageReference.child(pictureUrl);
             ref.putFile(filePath)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
@@ -201,4 +307,11 @@ public class ItemTwoFragment extends Fragment {
                     });
         }
     }
+    @Override
+    public void onConnected(@Nullable Bundle bundle) { }
+    @Override
+    public void onConnectionSuspended(int i) { }
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) { }
+
 }
