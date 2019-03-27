@@ -16,13 +16,7 @@
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/icon"
-                style="@style/ThemeOverlay.FirebaseIcon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/desc_firebase_lockup"
-                android:src="@drawable/tflogo2" />
+
 
             <TextView
                 android:id="@+id/titleText"

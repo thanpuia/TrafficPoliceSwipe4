@@ -47,6 +47,9 @@ import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -57,10 +60,13 @@ import com.google.firebase.storage.UploadTask;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
 
+
+import es.dmoral.toasty.Toasty;
 
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.LOCATION_SERVICE;
@@ -98,6 +104,8 @@ public class ItemTwoFragment extends Fragment implements GoogleApiClient.Connect
     String shared_fullName;
     String shared_email;
     String shared_phone;
+
+    public static ArrayList<String> userPostUniqueIdLists;
 
     String newKey;
     public static ItemTwoFragment newInstance() {
@@ -160,7 +168,6 @@ public class ItemTwoFragment extends Fragment implements GoogleApiClient.Connect
             @Override
             public void onClick(View view) {
 
-
                updateIntoAdminNotification();
                updateIntoUserAccount();
 
@@ -170,9 +177,7 @@ public class ItemTwoFragment extends Fragment implements GoogleApiClient.Connect
         chooseImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 chooseImage();
-
             }
         });
 
@@ -183,6 +188,7 @@ public class ItemTwoFragment extends Fragment implements GoogleApiClient.Connect
             }
         });
 
+        getUserPostIds();//FOR FURTHER USE
       // myRef.push().setValue("33");
         return view;
     }
@@ -243,8 +249,8 @@ public class ItemTwoFragment extends Fragment implements GoogleApiClient.Connect
 
     private void updateIntoUserAccount() {
 
-        String newPostUniqueKey = database.child("user_details/post").push().getKey();
-        database.child("user_details/"+shared_userUniqueKey+"/post").child(newPostUniqueKey).setValue(newKey);
+        String newPostUniqueKey = database.child("user_details/post_id").push().getKey();
+        database.child("user_details/"+shared_userUniqueKey+"/post_id").child(newPostUniqueKey).setValue(newKey);
     }
 
 
@@ -313,5 +319,40 @@ public class ItemTwoFragment extends Fragment implements GoogleApiClient.Connect
     public void onConnectionSuspended(int i) { }
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) { }
+
+    //GETTING ALL THE ID THAT THE USER HAVE POSTED . SO THAT IT CAN BE DL IN THE SingleUserFeed
+    private void getUserPostIds() {
+        FirebaseDatabase database1;
+        database1 = FirebaseDatabase.getInstance();
+
+        userPostUniqueIdLists = new ArrayList<>();
+        DatabaseReference myRef;
+        myRef = database1.getReference("user_details/" + shared_userUniqueKey + "/post_id");
+
+
+        myRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                    String tempUniqueKey = (String) dataSnapshot.getValue();
+                    userPostUniqueIdLists.add(tempUniqueKey);
+                    Log.d("TAG", "getUserPostId: " + dataSnapshot);
+
+                   // Toasty.normal(getContext(), "" + userPostUniqueIdLists, Toasty.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) { }
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) { }
+
+        });
+
+    }
 
 }

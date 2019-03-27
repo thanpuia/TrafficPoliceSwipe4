@@ -26,7 +26,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
     StorageReference storageReference = FirebaseStorage.getInstance().getReference();
 
     Context c;
-    //ArrayList<Spaceship> spaceships;
+
     ArrayList<String> adminList;
     ArrayList<String> dateList;
     ArrayList<String> messageList;

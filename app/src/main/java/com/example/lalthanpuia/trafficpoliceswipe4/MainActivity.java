@@ -60,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
 
                         ItemFiveFragment itemFiveFragment = null;
 
+                        SingleUserFeed singleUserFeed = null;
+
 
                         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
@@ -80,12 +82,12 @@ public class MainActivity extends AppCompatActivity {
 
                                 break;
                             case R.id.action_item4:
+                                itemTwoFragment = ItemTwoFragment.newInstance();
+
                                 // itemFourFragment = ItemFourFragment.newInstance();
                                 // transaction.replace(R.id.frame_layout,itemFourFragment);
-                                Intent intent1 = new Intent(getApplicationContext(), ItemFiveActivity.class);
-                                startActivity(intent1);
-
-
+                                singleUserFeed = new SingleUserFeed();
+                                transaction.replace(R.id.frame_layout, singleUserFeed);
                                 break;
 
                         }

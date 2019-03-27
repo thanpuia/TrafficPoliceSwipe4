@@ -14,12 +14,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".signing.FireBasePhoneAuth"></activity>
+        <activity android:name=".signing.FireBasePhoneAuth" />
         <activity android:name=".ItemFiveActivity" />
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".MainActivity" />
         <activity android:name=".signing.AfterSignIn" />
         <activity android:name=".signing.GoogleSignUp" />
-
         <activity
             android:name=".signing.GoogleSignIn"
             android:theme="@style/AppTheme.NoActionBar">
@@ -29,13 +28,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-     <!--   <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>-->
     </application>
 
 </manifest>
