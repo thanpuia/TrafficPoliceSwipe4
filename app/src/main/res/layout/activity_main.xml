@@ -29,7 +29,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#EEECEC"
-            app:menu="@menu/bottom_navigation_items"
             android:animateLayoutChanges="false" />
 
     </LinearLayout>

@@ -45,7 +45,20 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        boolean citizen = true;
+
+
         bottomNavigationView = findViewById(R.id.navigation);
+        if(citizen){
+            bottomNavigationView.inflateMenu(R.menu.bottom_navigation_items_for_citizen);
+        }
+        else{
+            bottomNavigationView.inflateMenu(R.menu.bottom_navigation_items);
+
+        }
+
+       // bottomNavigationView.getMenu().add(R.menu.bottom_navigation_items_for_citizen);
         BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
 
         bottomNavigationView.setOnNavigationItemSelectedListener
