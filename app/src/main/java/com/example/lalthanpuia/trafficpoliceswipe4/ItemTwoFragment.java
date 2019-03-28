@@ -193,8 +193,6 @@ public class ItemTwoFragment extends Fragment implements GoogleApiClient.Connect
         return view;
     }
 
-
-
     private void updateIntoAdminNotification() {
         String currentDateandTime = sdf.format(new Date());
 

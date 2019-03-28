@@ -112,15 +112,11 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-
         //MANUALLY DISPLAY THE FIRST FRAGMENT ONLY OE TIME
         FragmentTransaction tempTtransaction = getSupportFragmentManager().beginTransaction();
         tempTtransaction.replace(R.id.frame_layout, ItemOneFragment.newInstance());
         tempTtransaction.commit();
-
-
     }
-
 
     public void logoutClick(View view) {
         try {
@@ -128,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
             GoogleSignIn.mAuth.signOut();
             Intent intent = new Intent(this, GoogleSignIn.class);
             startActivity(intent);
+            finish();
 
         } catch (Exception e) {
             Toasty.error(this,"Somethings wrong");

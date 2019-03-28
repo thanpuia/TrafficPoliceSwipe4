@@ -43,6 +43,7 @@ public class Paginator {
 
     int counter = 0;
     boolean firstPageLoaded = false;
+    String from;
 
 
     public Paginator(final Context c, PullToLoadView pullToLoadView) {
@@ -61,7 +62,7 @@ public class Paginator {
        // adapter=new MyAdapter(c,new ArrayList<String>());
 
 
-        adapter=new MyAdapter(c,new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>());
+        adapter=new MyAdapter(c,new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>(),new String(), new ArrayList<String>());
         rv.setAdapter(adapter);
 
         database = FirebaseDatabase.getInstance();
@@ -168,17 +169,18 @@ public class Paginator {
                 String userUniqueKey = String.valueOf(dataSnapshot.child("user_id").getValue());
 
 
-
                 lastKey = dataSnapshot.getKey();
 
                 String uniqueKey = lastKey;
+                String postuniquekey= lastKey;
 
                 //messageTemp = messageTemp+" \n"+latitude+" "+longitude;
 ////                admin_arrayList.add(adminTemp);
 ////                date_arrayList.add(dateTemp);
 ////                message_arrayList.add(messageTemp);
 //
-                adapter.add(adminTemp, dateTemp, messageTemp, downloadURL, latitude, longitude, uniqueKey, userUniqueKey);
+                from = "paginator";
+                adapter.add(adminTemp, dateTemp, messageTemp, downloadURL, latitude, longitude, uniqueKey, userUniqueKey, from, postuniquekey);
                 adapter.notifyDataSetChanged();
 //                counter++;
                 startAt = (Long) dataSnapshot.child("sortkey").getValue();

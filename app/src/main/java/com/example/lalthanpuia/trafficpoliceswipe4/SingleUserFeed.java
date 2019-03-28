@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,21 +13,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.OnDisconnect;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.srx.widget.PullToLoadView;
 
 import java.util.ArrayList;
-
-import es.dmoral.toasty.Toasty;
 
 
 /**
@@ -44,6 +38,7 @@ public class SingleUserFeed extends Fragment {
     private boolean hasLoadedAll = false;
     private int nextPage;
     int NUM_LOAD_INDEX = 10;
+    int x;
 
     FirebaseDatabase database;
     DatabaseReference myRef,myRef_userpostid;
@@ -83,7 +78,7 @@ public class SingleUserFeed extends Fragment {
         rv.setLayoutManager(new LinearLayoutManager(c, LinearLayoutManager.VERTICAL,false));
 
         this.c=getContext();
-        adapter=new MyAdapter(c,new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>());
+        adapter=new MyAdapter(c,new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>(), new String(), new ArrayList<String>());
         rv.setAdapter(adapter);
 
 
@@ -100,53 +95,9 @@ public class SingleUserFeed extends Fragment {
         return view;
     }
 
-   /* private void getUserPostIds() {
-        myRef = database.getReference("user_details/" + shared_userUniqueKey + "/post_id");
-
-        processDone =false;
-
-        myRef.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                if(dataSnapshot.exists()){
-                    String tempUniqueKey = (String) dataSnapshot.getValue();
-                    userPostUniqueKeyList.add(tempUniqueKey);
-                    Log.d("TAG", "getUserPostId: " + dataSnapshot);
-
-                    Toasty.normal(getContext(), "" + userPostUniqueKeyList, Toasty.LENGTH_SHORT).show();
-                }else{
-
-                    processDone = true;
-                    getUserPosts();
-                }
-
-
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-
-        });
-
-    }*/
-
     private void getUserPosts() {
 
-        for (int x = 0; x < ItemTwoFragment.userPostUniqueIdLists.size(); x++) {
+        for ( x = 0; x < ItemTwoFragment.userPostUniqueIdLists.size(); x++) {
             myRef = database.getReference("notifications/"+ItemTwoFragment.userPostUniqueIdLists.get(x));
             Query ref1;
             ref1 = myRef.orderByChild("sortkey");
@@ -168,7 +119,9 @@ public class SingleUserFeed extends Fragment {
                     String latitude = (String)     dataSnapshot.child("latitude").getValue();
                     String longitude = (String)    dataSnapshot.child("longitude").getValue();
                     String userUniqueKey = String.valueOf(dataSnapshot.child("user_id").getValue());
-                    adapter.add(adminTemp, dateTemp, messageTemp, downloadURL, latitude, longitude, uniqueKey, userUniqueKey);
+
+                    String from = "singleUserFeed";
+                    adapter.add(adminTemp, dateTemp, messageTemp, downloadURL, latitude, longitude, uniqueKey, userUniqueKey, from, userPostUniqueKeyList.get(x));
                     adapter.notifyDataSetChanged();
                 }
                 @Override

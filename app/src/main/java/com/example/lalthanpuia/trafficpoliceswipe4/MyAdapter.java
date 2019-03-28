@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,8 +16,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.lang.reflect.Array;
-import java.net.URL;
 import java.util.ArrayList;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
@@ -35,6 +32,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
     ArrayList<String> longitudeList;
     ArrayList<String> uniqueKeyList;
     ArrayList<String> userUniqueKeyList;
+    ArrayList<String> postUniquekeyList;
+    String fromWhere;
 
     Bitmap bitmap;
 
@@ -42,7 +41,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
     CONSTRUCTOR
     */
     //public MyAdapter(Context c, ArrayList<Spaceship> spaceship) {
-    public MyAdapter(Context c, ArrayList<String> admin, ArrayList<String> date, ArrayList<String> message, ArrayList<String> downloadURL, ArrayList<String> latitude, ArrayList<String> longitude, ArrayList<String> uniqueKey, ArrayList<String> userUniqueKey) {
+    public MyAdapter(Context c, ArrayList<String> admin, ArrayList<String> date, ArrayList<String> message, ArrayList<String> downloadURL, ArrayList<String> latitude, ArrayList<String> longitude, ArrayList<String> uniqueKey, ArrayList<String> userUniqueKey, String from, ArrayList<String> postUniquekey) {
         this.c = c;
         this.adminList = admin;
         this.dateList = date;
@@ -52,7 +51,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
         this.longitudeList = longitude;
         this.uniqueKeyList = uniqueKey;
         this.userUniqueKeyList = userUniqueKey;
-
+        this.postUniquekeyList = postUniquekey;
+        this.fromWhere = from;
 
     }
 
@@ -123,7 +123,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
         notifyDataSetChanged();
     }*/
 
-    public void add(String ad, String dat, String mes, String dURL, String lat, String lng, String uniqueKey, String userUniqueKey) {
+    public void add(String ad, String dat, String mes, String dURL, String lat, String lng, String uniqueKey, String userUniqueKey, String from, String postuniquekey) {
         adminList.add(ad);
         dateList.add(dat);
         messageList.add(mes);
@@ -134,6 +134,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
 
         uniqueKeyList.add(uniqueKey);
         userUniqueKeyList.add(userUniqueKey);
+        postUniquekeyList.add(postuniquekey);
+
+        fromWhere = from;
 
         notifyDataSetChanged();
     }
@@ -150,6 +153,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
         latitudeList.clear();
         longitudeList.clear();
 
+        postUniquekeyList.clear();
      //  spaceships.clear();
        notifyDataSetChanged();
     }
@@ -167,7 +171,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
         ImageView imageView;
         ImageView mapIV;
 
-        public MyHolder(View itemView) {
+        public MyHolder(final View itemView) {
             super(itemView);
 
            // this.nametxt= (TextView) itemView.findViewById(R.id.nameTxt);
@@ -177,7 +181,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
             this.imageView = itemView.findViewById(R.id.imageView);
             this.mapIV = itemView.findViewById(R.id.mapIV);
 
-            itemView.setOnClickListener(this);
+            if(fromWhere.equals("paginator")){
+                itemView.setOnClickListener(this);
+            }
+
 
         }
 
@@ -186,6 +193,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
 
             int position = getAdapterPosition();
             Intent intent = new Intent(view.getContext(),ItemFiveActivity.class);
+
             intent.putExtra("message",messageList.get(position));
             intent.putExtra("downloadUrl",downloadURLList.get(position));
 
@@ -194,6 +202,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
 
             intent.putExtra("uniqueKey",uniqueKeyList.get(position));
             intent.putExtra("userUniqueKey",userUniqueKeyList.get(position));
+            intent.putExtra("postUniqueKey",postUniquekeyList.get(position));
 
             c.startActivity(intent);
         }
