@@ -119,9 +119,10 @@ public class SingleUserFeed extends Fragment {
                     String latitude = (String)     dataSnapshot.child("latitude").getValue();
                     String longitude = (String)    dataSnapshot.child("longitude").getValue();
                     String userUniqueKey = String.valueOf(dataSnapshot.child("user_id").getValue());
+                    String policeIncharge = (String) dataSnapshot.child("police_incharge").getValue();
 
                     String from = "singleUserFeed";
-                    adapter.add(adminTemp, dateTemp, messageTemp, downloadURL, latitude, longitude, uniqueKey, userUniqueKey, from, userPostUniqueKeyList.get(x));
+                    adapter.add(adminTemp, dateTemp, messageTemp, downloadURL, latitude, longitude, uniqueKey, userUniqueKey, from, policeIncharge);
                     adapter.notifyDataSetChanged();
                 }
                 @Override

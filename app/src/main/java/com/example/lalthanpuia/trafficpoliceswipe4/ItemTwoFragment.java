@@ -238,6 +238,9 @@ public class ItemTwoFragment extends Fragment implements GoogleApiClient.Connect
             database.child("notifications/" + newKey).child("longitude").setValue(String.valueOf(lastLocation.getLongitude()));
             database.child("notifications/" + newKey).child("altitude").setValue(String.valueOf(lastLocation.getAltitude()));
             database.child("notifications/" + newKey).child("accuracy").setValue(String.valueOf(lastLocation.getAccuracy()));
+            database.child("notifications/" + newKey).child("police_incharge").setValue("");
+
+
 
         }
         // CLEAR THE FIELD

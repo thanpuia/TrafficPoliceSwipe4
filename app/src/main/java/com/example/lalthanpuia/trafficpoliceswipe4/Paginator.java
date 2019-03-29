@@ -62,7 +62,7 @@ public class Paginator {
        // adapter=new MyAdapter(c,new ArrayList<String>());
 
 
-        adapter=new MyAdapter(c,new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>(),new String(), new ArrayList<String>());
+        adapter=new MyAdapter(c,new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>(),new String(),new ArrayList<String>());
         rv.setAdapter(adapter);
 
         database = FirebaseDatabase.getInstance();
@@ -166,13 +166,14 @@ public class Paginator {
                 String latitude = (String)     dataSnapshot.child("latitude").getValue();
                 String longitude = (String)    dataSnapshot.child("longitude").getValue();
 
-                String userUniqueKey = String.valueOf(dataSnapshot.child("user_id").getValue());
+                String userUniqueKey = (String)dataSnapshot.child("user_id").getValue();
+                String police_incharge = (String) dataSnapshot.child("police_incharge").getValue();
 
 
                 lastKey = dataSnapshot.getKey();
 
                 String uniqueKey = lastKey;
-                String postuniquekey= lastKey;
+               // String postuniquekey= lastKey;
 
                 //messageTemp = messageTemp+" \n"+latitude+" "+longitude;
 ////                admin_arrayList.add(adminTemp);
@@ -180,7 +181,7 @@ public class Paginator {
 ////                message_arrayList.add(messageTemp);
 //
                 from = "paginator";
-                adapter.add(adminTemp, dateTemp, messageTemp, downloadURL, latitude, longitude, uniqueKey, userUniqueKey, from, postuniquekey);
+                adapter.add(adminTemp, dateTemp, messageTemp, downloadURL, latitude, longitude, uniqueKey, userUniqueKey, from,police_incharge);
                 adapter.notifyDataSetChanged();
 //                counter++;
                 startAt = (Long) dataSnapshot.child("sortkey").getValue();

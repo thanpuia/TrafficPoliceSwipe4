@@ -1,9 +1,11 @@
 package com.example.lalthanpuia.trafficpoliceswipe4;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,7 +34,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
     ArrayList<String> longitudeList;
     ArrayList<String> uniqueKeyList;
     ArrayList<String> userUniqueKeyList;
-    ArrayList<String> postUniquekeyList;
+    ArrayList<String> police_inchargeList;
     String fromWhere;
 
     Bitmap bitmap;
@@ -41,7 +43,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
     CONSTRUCTOR
     */
     //public MyAdapter(Context c, ArrayList<Spaceship> spaceship) {
-    public MyAdapter(Context c, ArrayList<String> admin, ArrayList<String> date, ArrayList<String> message, ArrayList<String> downloadURL, ArrayList<String> latitude, ArrayList<String> longitude, ArrayList<String> uniqueKey, ArrayList<String> userUniqueKey, String from, ArrayList<String> postUniquekey) {
+    public MyAdapter(Context c, ArrayList<String> admin, ArrayList<String> date, ArrayList<String> message, ArrayList<String> downloadURL, ArrayList<String> latitude, ArrayList<String> longitude, ArrayList<String> uniqueKey, ArrayList<String> userUniqueKey, String from, ArrayList<String> police_incharge ) {
+
         this.c = c;
         this.adminList = admin;
         this.dateList = date;
@@ -51,8 +54,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
         this.longitudeList = longitude;
         this.uniqueKeyList = uniqueKey;
         this.userUniqueKeyList = userUniqueKey;
-        this.postUniquekeyList = postUniquekey;
         this.fromWhere = from;
+        this.police_inchargeList = police_incharge;
 
     }
 
@@ -61,11 +64,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
     public MyHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v= LayoutInflater.from(parent.getContext()).inflate(R.layout.model,parent,false);
         MyHolder holder=new MyHolder(v);
-
         return holder;
+
     }
 
     //BIND DATA
+    @SuppressLint("ResourceAsColor")
     @Override
     public void onBindViewHolder(final MyHolder holder, int position) {
        // holder.nametxt.setText(spaceships.get(position).toString());
@@ -98,6 +102,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
             });
         }
 
+        if(police_inchargeList.get(position).equals("")){
+
+        }else
+        {
+            holder.cardView.setCardBackgroundColor(R.color.police_handled_color);
+        }
+
 
     }
 
@@ -123,7 +134,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
         notifyDataSetChanged();
     }*/
 
-    public void add(String ad, String dat, String mes, String dURL, String lat, String lng, String uniqueKey, String userUniqueKey, String from, String postuniquekey) {
+    public void add(String ad, String dat, String mes, String dURL, String lat, String lng, String uniqueKey, String userUniqueKey, String from, String police_incharge) {
         adminList.add(ad);
         dateList.add(dat);
         messageList.add(mes);
@@ -134,9 +145,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
 
         uniqueKeyList.add(uniqueKey);
         userUniqueKeyList.add(userUniqueKey);
-        postUniquekeyList.add(postuniquekey);
 
         fromWhere = from;
+        police_inchargeList.add(police_incharge);
 
         notifyDataSetChanged();
     }
@@ -153,7 +164,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
         latitudeList.clear();
         longitudeList.clear();
 
-        postUniquekeyList.clear();
+        userUniqueKeyList.clear();
+        uniqueKeyList.clear();
+        police_inchargeList.clear();
+
      //  spaceships.clear();
        notifyDataSetChanged();
     }
@@ -170,6 +184,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
         TextView messageTV;
         ImageView imageView;
         ImageView mapIV;
+        CardView cardView;
 
         public MyHolder(final View itemView) {
             super(itemView);
@@ -180,12 +195,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
             this.messageTV= (TextView) itemView.findViewById(R.id.messageTV);
             this.imageView = itemView.findViewById(R.id.imageView);
             this.mapIV = itemView.findViewById(R.id.mapIV);
+            this.cardView = itemView.findViewById(R.id.cardView);
 
             if(fromWhere.equals("paginator")){
                 itemView.setOnClickListener(this);
             }
-
-
         }
 
         @Override
@@ -202,7 +216,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
 
             intent.putExtra("uniqueKey",uniqueKeyList.get(position));
             intent.putExtra("userUniqueKey",userUniqueKeyList.get(position));
-            intent.putExtra("postUniqueKey",postUniquekeyList.get(position));
+
+            intent.putExtra("police_incharge",police_inchargeList.get(position));
 
             c.startActivity(intent);
         }
