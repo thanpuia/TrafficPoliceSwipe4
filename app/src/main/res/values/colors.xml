@@ -14,4 +14,7 @@
 
     <color name="police_handled_color">#FFCC80</color>
 
+    <color name="police_not_handled_color">#FFFFFF</color>
+
+
 </resources>

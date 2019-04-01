@@ -18,10 +18,18 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.example.lalthanpuia.trafficpoliceswipe4.signing.GoogleSignIn;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.ArrayList;
 
 import es.dmoral.toasty.Toasty;
 
@@ -34,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
     public static final String FIREBASE_PASSWORD = "Lorenzo@99";
     boolean Status = true;
     boolean unique;
+    FirebaseDatabase database,database_policeIncharge;
+    DatabaseReference myRef_police;
+    public static ArrayList<String> policeName;
 
     BottomNavigationView bottomNavigationView;
     BottomNavigationViewHelper bottomNavigationViewHelper;
@@ -48,6 +59,8 @@ public class MainActivity extends AppCompatActivity {
 
         boolean citizen = true;
 
+        policeName = new ArrayList<>();
+        policeName.add("");
 
         bottomNavigationView = findViewById(R.id.navigation);
         if(citizen){
@@ -111,6 +124,27 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                 });
+        //GETTING THE POLICE NAMES FOR THE HINT
+        database_policeIncharge = FirebaseDatabase.getInstance();
+
+        myRef_police = database_policeIncharge.getReference("police_details");
+
+        //getReference hi police_details hi dah ve ve angai.
+        myRef_police.orderByChild("police_details").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                //  Log.v("tag",""+dataSnapshot);
+                String officerTemp = String.valueOf(dataSnapshot.child("name").getValue());
+
+                Log.v("tag","name: "+officerTemp);
+
+                //  policeName[]
+                policeName.add(officerTemp);
+
+            }
+
+            @Override public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }@Override public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) { }@Override public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }@Override public void onCancelled(@NonNull DatabaseError databaseError) { }
+        });
 
         //MANUALLY DISPLAY THE FIRST FRAGMENT ONLY OE TIME
         FragmentTransaction tempTtransaction = getSupportFragmentManager().beginTransaction();

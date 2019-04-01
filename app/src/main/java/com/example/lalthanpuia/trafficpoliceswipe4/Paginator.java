@@ -32,7 +32,7 @@ public class Paginator {
     private boolean isLoading = false;
     private boolean hasLoadedAll = false;
     private int nextPage;
-    int NUM_LOAD_INDEX = 10;
+    int NUM_LOAD_INDEX = 40;
 
     FirebaseDatabase database;
     DatabaseReference myRef;
@@ -181,7 +181,7 @@ public class Paginator {
 ////                message_arrayList.add(messageTemp);
 //
                 from = "paginator";
-                adapter.add(adminTemp, dateTemp, messageTemp, downloadURL, latitude, longitude, uniqueKey, userUniqueKey, from,police_incharge);
+                adapter.add(adminTemp, dateTemp, messageTemp, downloadURL, latitude, longitude, uniqueKey, userUniqueKey, from, police_incharge);
                 adapter.notifyDataSetChanged();
 //                counter++;
                 startAt = (Long) dataSnapshot.child("sortkey").getValue();
@@ -214,7 +214,7 @@ public class Paginator {
                 isLoading=false;
                 nextPage=page+1;
             }
-        },1500);
+        },1100);
     }
   /*  public void loadNewData(){
 

@@ -102,11 +102,16 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
             });
         }
 
+        String incharge ="Incharge: "+ police_inchargeList.get(position);
+        holder.police_incharge.setText(incharge);
         if(police_inchargeList.get(position).equals("")){
+          //  holder.cardView.setCardBackgroundColor(R.color.police_not_handled_color);
 
         }else
         {
-            holder.cardView.setCardBackgroundColor(R.color.police_handled_color);
+            //
+            // holder.cardView.setCardBackgroundColor(R.color.police_handled_color);
+
         }
 
 
@@ -186,6 +191,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
         ImageView mapIV;
         CardView cardView;
 
+        TextView police_incharge;
+
         public MyHolder(final View itemView) {
             super(itemView);
 
@@ -196,6 +203,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
             this.imageView = itemView.findViewById(R.id.imageView);
             this.mapIV = itemView.findViewById(R.id.mapIV);
             this.cardView = itemView.findViewById(R.id.cardView);
+            this.police_incharge = itemView.findViewById(R.id.police_incharge);
 
             if(fromWhere.equals("paginator")){
                 itemView.setOnClickListener(this);
