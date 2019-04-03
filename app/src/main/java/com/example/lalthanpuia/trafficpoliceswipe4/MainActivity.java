@@ -18,7 +18,9 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -45,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     FirebaseDatabase database,database_policeIncharge;
     DatabaseReference myRef_police;
     public static ArrayList<String> policeName;
+    Intent intent;
 
     BottomNavigationView bottomNavigationView;
     BottomNavigationViewHelper bottomNavigationViewHelper;
@@ -57,12 +60,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Setting toolbar as the ActionBar with setSupportActionBar() call
         boolean citizen = true;
 
         policeName = new ArrayList<>();
         policeName.add("");
 
-        bottomNavigationView = findViewById(R.id.navigation);
+
+
+      /*  bottomNavigationView = findViewById(R.id.navigation);
         if(citizen){
             bottomNavigationView.inflateMenu(R.menu.bottom_navigation_items_for_citizen);
         }
@@ -83,39 +89,37 @@ public class MainActivity extends AppCompatActivity {
                         ItemTwoFragment itemTwoFragment = null;
                         ItemThreeFragment itemThreeFragment = null;
                         ItemFourFragment itemFourFragment = null;
-
                         ItemFiveFragment itemFiveFragment = null;
-
                         SingleUserFeed singleUserFeed = null;
-
 
                         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
                         switch (item.getItemId()) {
+
                             case R.id.action_item1:
                                 itemOneFragment = ItemOneFragment.newInstance();
                                 transaction.replace(R.id.frame_layout, itemOneFragment);
                                 break;
+
                             case R.id.action_item2:
                                 itemTwoFragment = ItemTwoFragment.newInstance();
                                 transaction.replace(R.id.frame_layout, itemTwoFragment);
                                 break;
+
                             case R.id.action_item3:
-                  /*  itemThreeFragment = ItemThreeFragment.newInstance();
-                    transaction.replace(R.id.frame_layout,itemThreeFragment);*/
+                              *//*  itemThreeFragment = ItemThreeFragment.newInstance();
+                                transaction.replace(R.id.frame_layout,itemThreeFragment);*//*
                                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                                 startActivityForResult(intent, CAMERA_REQUEST);
-
                                 break;
+
                             case R.id.action_item4:
                                 itemTwoFragment = ItemTwoFragment.newInstance();
-
                                 // itemFourFragment = ItemFourFragment.newInstance();
                                 // transaction.replace(R.id.frame_layout,itemFourFragment);
                                 singleUserFeed = new SingleUserFeed();
                                 transaction.replace(R.id.frame_layout, singleUserFeed);
                                 break;
-
                         }
 
                         transaction.commit();
@@ -123,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
                         return true;
 
                     }
-                });
+                });*/
         //GETTING THE POLICE NAMES FOR THE HINT
         database_policeIncharge = FirebaseDatabase.getInstance();
 
@@ -146,13 +150,39 @@ public class MainActivity extends AppCompatActivity {
             @Override public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }@Override public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) { }@Override public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }@Override public void onCancelled(@NonNull DatabaseError databaseError) { }
         });
 
-        //MANUALLY DISPLAY THE FIRST FRAGMENT ONLY OE TIME
+  /*      //MANUALLY DISPLAY THE FIRST FRAGMENT ONLY OE TIME
         FragmentTransaction tempTtransaction = getSupportFragmentManager().beginTransaction();
         tempTtransaction.replace(R.id.frame_layout, ItemOneFragment.newInstance());
-        tempTtransaction.commit();
-    }
+        tempTtransaction.commit();*/
 
+        intent = new Intent(this, FragmentHolderActivity.class);
+    }
+/*
     public void logoutClick(View view) {
+
+    }*/
+
+    public void oneclick(View view) {
+        intent.putExtra("click","1");
+        startActivity(intent);
+    }
+    public void twoclick(View view) {
+        intent.putExtra("click","2");
+        startActivity(intent);
+    }
+    public void threeclick(View view) {
+        intent.putExtra("click","3");
+        startActivity(intent);
+    }
+    public void fourclick(View view) {
+        intent.putExtra("click","4");
+        startActivity(intent);
+    }
+    public void fiveclick(View view) {
+        intent.putExtra("click","5");
+        startActivity(intent);
+    }
+    public void sixclick(View view) {
         try {
 
             GoogleSignIn.mAuth.signOut();
@@ -165,6 +195,14 @@ public class MainActivity extends AppCompatActivity {
 
             e.printStackTrace();
         }
+    } public void sevenclick(View view) {
+        intent.putExtra("click","7");
+        startActivity(intent);
+    }
+
+    public void eightclick(View view) {
+        intent.putExtra("click","8");
+        startActivity(intent);
     }
 }
 //    ListView listView;
