@@ -22,7 +22,6 @@ public class FragmentHolderActivity extends AppCompatActivity {
         ItemTwoFragment itemTwoFragment = null;
         ItemThreeFragment itemThreeFragment = null;
         ItemFourFragment itemFourFragment = null;
-        ItemFiveFragment itemFiveFragment = null;
         SingleUserFeed singleUserFeed = null;
         GlobalNotificationSenderFragment globalNotificationSenderFragment = null;
         GlobalNotificationFragment globalNotificationFragment = null;

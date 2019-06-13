@@ -176,23 +176,17 @@ public class Paginator {
                // String postuniquekey= lastKey;
 
                 //messageTemp = messageTemp+" \n"+latitude+" "+longitude;
-////                admin_arrayList.add(adminTemp);
-////                date_arrayList.add(dateTemp);
-////                message_arrayList.add(messageTemp);
-//
+//                admin_arrayList.add(adminTemp);
+//                date_arrayList.add(dateTemp);
+//                message_arrayList.add(messageTemp);
+
                 from = "paginator";
                 adapter.add(adminTemp, dateTemp, messageTemp, downloadURL, latitude, longitude, uniqueKey, userUniqueKey, from, police_incharge);
                 adapter.notifyDataSetChanged();
 //                counter++;
                 startAt = (Long) dataSnapshot.child("sortkey").getValue();
 
-
-
-            }
-            @Override public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }
-            @Override public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) { }
-            @Override public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }
-            @Override public void onCancelled(@NonNull DatabaseError databaseError) { }
+            } @Override public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }@Override public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) { }@Override public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }@Override public void onCancelled(@NonNull DatabaseError databaseError) { }
         });
 
         new Handler().postDelayed(new Runnable() {

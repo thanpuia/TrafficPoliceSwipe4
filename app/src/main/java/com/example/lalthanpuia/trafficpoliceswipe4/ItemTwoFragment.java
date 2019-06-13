@@ -4,9 +4,7 @@ package com.example.lalthanpuia.trafficpoliceswipe4;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.ContentResolver;
-import android.content.Context;
-import android.content.DialogInterface;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -70,6 +68,7 @@ import es.dmoral.toasty.Toasty;
 
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.LOCATION_SERVICE;
+import static java.security.AccessController.getContext;
 
 
 /**
@@ -104,8 +103,9 @@ public class ItemTwoFragment extends Fragment implements GoogleApiClient.Connect
     String shared_fullName;
     String shared_email;
     String shared_phone;
+    boolean imageSelect = false;
 
-    public static ArrayList<String> userPostUniqueIdLists;
+   // public static ArrayList<String> userPostUniqueIdLists;
 
     String newKey;
     public static ItemTwoFragment newInstance() {
@@ -157,7 +157,7 @@ public class ItemTwoFragment extends Fragment implements GoogleApiClient.Connect
         et_message = view.findViewById(R.id.et_message);
         button = view.findViewById(R.id.button);
         chooseImg = view.findViewById(R.id.chooseImage);
-        upload = view.findViewById(R.id.upload);
+        //upload = view.findViewById(R.id.upload);
         imageView = view.findViewById(R.id.imgView);
         database = FirebaseDatabase.getInstance().getReference();
 
@@ -169,6 +169,9 @@ public class ItemTwoFragment extends Fragment implements GoogleApiClient.Connect
             public void onClick(View view) {
 
                updateIntoAdminNotification();
+               if(imageSelect) {//CHOOSE PICTURE IS TRUE
+                    uploadImage();
+               }
                updateIntoUserAccount();
 
             }
@@ -181,14 +184,14 @@ public class ItemTwoFragment extends Fragment implements GoogleApiClient.Connect
             }
         });
 
-        upload.setOnClickListener(new View.OnClickListener() {
+      /*  upload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 uploadImage();
             }
-        });
+        });*/
 
-        getUserPostIds();//FOR FURTHER USE
+      //  getUserPostIds();//FOR FURTHER USE
       // myRef.push().setValue("33");
         return view;
     }
@@ -272,6 +275,7 @@ public class ItemTwoFragment extends Fragment implements GoogleApiClient.Connect
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), filePath);
                 imageView.setImageBitmap(bitmap);
+                imageSelect = true;
             }
             catch (IOException e)
             {
@@ -321,39 +325,6 @@ public class ItemTwoFragment extends Fragment implements GoogleApiClient.Connect
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) { }
 
-    //GETTING ALL THE ID THAT THE USER HAVE POSTED . SO THAT IT CAN BE DL IN THE SingleUserFeed
-    private void getUserPostIds() {
-        FirebaseDatabase database1;
-        database1 = FirebaseDatabase.getInstance();
 
-        userPostUniqueIdLists = new ArrayList<>();
-        DatabaseReference myRef;
-        myRef = database1.getReference("user_details/" + shared_userUniqueKey + "/post_id");
-
-
-        myRef.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                    String tempUniqueKey = (String) dataSnapshot.getValue();
-                    userPostUniqueIdLists.add(tempUniqueKey);
-                    Log.d("TAG", "getUserPostId: " + dataSnapshot);
-
-                   // Toasty.normal(getContext(), "" + userPostUniqueIdLists, Toasty.LENGTH_SHORT).show();
-
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) { }
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) { }
-
-        });
-
-    }
 
 }

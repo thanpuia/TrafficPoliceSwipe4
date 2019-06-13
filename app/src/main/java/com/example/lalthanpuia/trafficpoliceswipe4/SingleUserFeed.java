@@ -97,8 +97,8 @@ public class SingleUserFeed extends Fragment {
 
     private void getUserPosts() {
 
-        for ( x = 0; x < ItemTwoFragment.userPostUniqueIdLists.size(); x++) {
-            myRef = database.getReference("notifications/"+ItemTwoFragment.userPostUniqueIdLists.get(x));
+        for ( x = 0; x < MainActivity.userPostUniqueIdLists.size(); x++ ) {
+            myRef = database.getReference("notifications/"+MainActivity.userPostUniqueIdLists.get(x));
             Query ref1;
             ref1 = myRef.orderByChild("sortkey");
 
@@ -132,5 +132,4 @@ public class SingleUserFeed extends Fragment {
             });
         }
     }
-
 }

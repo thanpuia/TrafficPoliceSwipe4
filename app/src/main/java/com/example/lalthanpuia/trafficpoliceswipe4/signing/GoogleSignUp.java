@@ -182,10 +182,8 @@ public class GoogleSignUp extends AppCompatActivity {
                 }
             });
 
-            Intent intent = new Intent(this, MainActivity.class);
+            Intent intent = new Intent(this, GoogleSignIn.class);
             startActivity(intent);
-
         }
     }
-
 }

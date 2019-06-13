@@ -74,7 +74,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
     public void onBindViewHolder(final MyHolder holder, int position) {
        // holder.nametxt.setText(spaceships.get(position).toString());
         holder.adminTV.setText(adminList.get(position).toString());
+        //holder.adminTV.setText("placeHolder");
+
         holder.dateTV.setText(dateList.get(position).toString());
+        //holder.dateTV.setText("placeHolder");
         holder.messageTV.setText(messageList.get(position).toString());
 
         String maplocation = "http://maps.google.com/maps/api/staticmap?center=" + latitudeList.get(position) + "," + longitudeList.get(position) + "&zoom=16&size=200x100&scale=2&markers=size:tiny%7Ccolor:red%7Clabel:S%7C"+ latitudeList.get(position) + "," + longitudeList.get(position) +"&key=AIzaSyARsaFMey84nKb-_wlxkkXhRseNak1fSRY";
@@ -113,10 +116,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
             // holder.cardView.setCardBackgroundColor(R.color.police_handled_color);
 
         }
-
-
     }
-
     /*
     TOTAL ITEMS
      */

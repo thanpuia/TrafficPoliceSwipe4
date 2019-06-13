@@ -49,11 +49,11 @@
                 android:layout_height="wrap_content"
                 android:text="Choose Image" />
 
-            <Button
+      <!--      <Button
                 android:id="@+id/upload"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Upload" />
+                android:text="Upload" />-->
 
 
             <ImageView
