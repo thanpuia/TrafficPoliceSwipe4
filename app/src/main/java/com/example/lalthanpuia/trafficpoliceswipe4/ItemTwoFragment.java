@@ -35,8 +35,6 @@ import com.example.lalthanpuia.trafficpoliceswipe4.signing.GoogleSignIn;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
@@ -63,18 +61,15 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
 
-
 import es.dmoral.toasty.Toasty;
 
 import static android.app.Activity.RESULT_OK;
-import static android.content.Context.LOCATION_SERVICE;
-import static java.security.AccessController.getContext;
-
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class ItemTwoFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, ActivityCompat.OnRequestPermissionsResultCallback {
+
     private static final String TAG = "MyApps-Location2";
 
     GoogleApiClient mGoogleApiClient;
@@ -103,6 +98,7 @@ public class ItemTwoFragment extends Fragment implements GoogleApiClient.Connect
     String shared_fullName;
     String shared_email;
     String shared_phone;
+    String shared_Uid;
     boolean imageSelect = false;
 
    // public static ArrayList<String> userPostUniqueIdLists;
@@ -130,10 +126,11 @@ public class ItemTwoFragment extends Fragment implements GoogleApiClient.Connect
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
 
         //GETTING THE SHARED PREFERENCES:
-        shared_userUniqueKey = sharedPreferences.getString("userUniqueKey","");
-        shared_fullName = sharedPreferences.getString("fullName","");
-        shared_email = sharedPreferences.getString("email","");
-        shared_phone = sharedPreferences.getString("phone","");
+        //shared_userUniqueKey = sharedPreferences.getString("userUniqueKey","");
+        //shared_fullName = sharedPreferences.getString("fullName","");
+        //shared_email = sharedPreferences.getString("email","");
+        //shared_phone = sharedPreferences.getString("phone","");
+        shared_Uid = sharedPreferences.getString("Uid","");
 
         Log.d("TAG","ItemTwoFragment/mAuth:"+ sharedPreferences.getString("fullName", null));
 
@@ -152,8 +149,6 @@ public class ItemTwoFragment extends Fragment implements GoogleApiClient.Connect
                 .checkLocationSettings(mGoogleApiClient, builder.build());
         mGoogleApiClient.connect();
 
-       /* et_admin = view.findViewById(R.id.et_admin);
-        et_date = view.findViewById(R.id.et_date);*/
         et_message = view.findViewById(R.id.et_message);
         button = view.findViewById(R.id.button);
         chooseImg = view.findViewById(R.id.chooseImage);
@@ -242,13 +237,14 @@ public class ItemTwoFragment extends Fragment implements GoogleApiClient.Connect
             database.child("notifications/" + newKey).child("altitude").setValue(String.valueOf(lastLocation.getAltitude()));
             database.child("notifications/" + newKey).child("accuracy").setValue(String.valueOf(lastLocation.getAccuracy()));
             database.child("notifications/" + newKey).child("police_incharge").setValue("");
+            database.child("notifications/" + newKey).child("username").setValue(shared_fullName);
+            database.child("notifications/" + newKey).child("user_phone").setValue(shared_phone);
 
 
 
         }
         // CLEAR THE FIELD
         et_message.setText("");
-
     }
 
     private void updateIntoUserAccount() {
@@ -292,13 +288,16 @@ public class ItemTwoFragment extends Fragment implements GoogleApiClient.Connect
             progressDialog.show();
 
             //pictureUrl = "images" + UUID.randomUUID().toString();
+
             StorageReference ref = storageReference.child(pictureUrl);
+
             ref.putFile(filePath)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             progressDialog.dismiss();
                             Toast.makeText(getContext(), "Uploaded", Toast.LENGTH_SHORT).show();
+
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -306,6 +305,7 @@ public class ItemTwoFragment extends Fragment implements GoogleApiClient.Connect
                         public void onFailure(@NonNull Exception e) {
                             progressDialog.dismiss();
                             Toast.makeText(getContext(), "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
+
                         }
                     })
                     .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {

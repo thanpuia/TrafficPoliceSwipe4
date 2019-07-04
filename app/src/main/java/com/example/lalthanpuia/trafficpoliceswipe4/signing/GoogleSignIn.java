@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -26,6 +27,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -38,8 +40,10 @@ public class GoogleSignIn extends AppCompatActivity {
     EditText userEmail,userPassword;
     public static FirebaseUser currentUser;
     SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
     public static ArrayList<String> roleAssign;
     ProgressDialog progressDialog;
+    UserDetails userDetails;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +83,7 @@ public class GoogleSignIn extends AppCompatActivity {
 
             Log.d("TAG",userEmail+" "+ userPassword);
 
-            mAuth.signInWithEmailAndPassword(mEmail, mPassword)
+      /*      mAuth.signInWithEmailAndPassword(mEmail, mPassword)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
@@ -87,7 +91,6 @@ public class GoogleSignIn extends AppCompatActivity {
                                 // Sign in success, update UI with the signed-in user's information
                                 Log.d("TAG", "signInWithEmail:success");
                                 FirebaseUser user = mAuth.getCurrentUser();
-
                                 updateUI(user);
                             } else {
                                 // If sign in fails, display a message to the user.
@@ -97,7 +100,7 @@ public class GoogleSignIn extends AppCompatActivity {
                                 updateUI(null);
                             }
                         }
-                    });
+                    });*/
         }
     }
 
@@ -106,7 +109,13 @@ public class GoogleSignIn extends AppCompatActivity {
         if(currentUser!=null){
 
             //FIRST CHECK THE SHARED PREFERENCESS
-            sharedPreferences = this.getSharedPreferences("com.example.lalthanpuia.trafficpoliceswipe4.signing", Context.MODE_PRIVATE);
+            sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            editor = sharedPreferences.edit();
+
+            //PUT THE FIREBASE USER DATA IN SHAREDPREFERENCE
+            editor.putString("Uid",currentUser.getUid());
+
+            editor.commit();
 
             String role = sharedPreferences.getString("role","");
 
@@ -128,7 +137,8 @@ public class GoogleSignIn extends AppCompatActivity {
                             String role = (String) dataSnapshot.child("role").getValue();
 
                             String userKey = dataSnapshot.getKey();
-                            sharedPreferences.edit().putString("role", role).apply();
+                            editor.putString("role", role);
+                            editor.commit();
 
                             Log.v("TAG","tole "+role);
                             goToMainMenuWithTheRole(role,email);
@@ -166,6 +176,7 @@ public class GoogleSignIn extends AppCompatActivity {
         }
 
     }
+
     public void downloadTheAssignReports(final String mEmail){
 
         final FirebaseDatabase databaseReference;
@@ -196,6 +207,33 @@ public class GoogleSignIn extends AppCompatActivity {
             @Override public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }@Override public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) { }@Override public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }@Override public void onCancelled(@NonNull DatabaseError databaseError) { }
         });
 
+    }
+
+    //TODO: Download the userdata
+    public UserDetails userDetailsDownload(String Uid) {
+
+        userDetails = new UserDetails();
+
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("user_details/"+Uid);
+
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                userDetails = dataSnapshot.getValue(UserDetails.class);
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+        return  userDetails;
     }
 
     public void showProgressDialog() {

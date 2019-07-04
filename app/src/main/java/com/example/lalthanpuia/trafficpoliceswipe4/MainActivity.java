@@ -103,13 +103,13 @@ public class MainActivity extends AppCompatActivity {
         adminGlobalSenderButton = findViewById(R.id.adminGlobalSenderButton);
         globalNotifyButton = findViewById(R.id.globalNotityButton);
 
-        //FIRST CHECK THE SHARED PREFERENCESS
-        sharedPreferences = this.getSharedPreferences("com.example.lalthanpuia.trafficpoliceswipe4.signing", Context.MODE_PRIVATE);
+        //FIRST CHECK THE SHARED PREFERENCE
+       // sharedPreferences = this.getSharedPreferences("com.example.lalthanpuia.trafficpoliceswipe4.signing", Context.MODE_PRIVATE);
 
         Intent intentfromSigin = getIntent();
 
         String role = (String) intentfromSigin.getStringExtra("role");
-        Log.v("TAG","ROle form MainActivigy"+ role);
+        Log.v("TAG","ROle from MainActivigy"+ role);
 
         //HIDE THE BUTTON IF THE USER IS ADMIN
         if(role.equals("admin")){

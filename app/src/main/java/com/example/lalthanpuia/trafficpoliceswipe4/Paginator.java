@@ -133,7 +133,7 @@ public class Paginator {
     {
         //adapter.clear();
         Log.i("LOADMORE/PAGE",""+page);
-        if(firstPageLoaded && page==1){
+        if( firstPageLoaded && page == 1){
             return;
         }else
             firstPageLoaded = true;
@@ -168,7 +168,6 @@ public class Paginator {
 
                 String userUniqueKey = (String)dataSnapshot.child("user_id").getValue();
                 String police_incharge = (String) dataSnapshot.child("police_incharge").getValue();
-
 
                 lastKey = dataSnapshot.getKey();
 

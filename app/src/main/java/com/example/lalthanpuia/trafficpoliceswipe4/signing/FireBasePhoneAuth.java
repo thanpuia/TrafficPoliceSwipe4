@@ -1,7 +1,9 @@
 package com.example.lalthanpuia.trafficpoliceswipe4.signing;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -29,7 +31,7 @@ import java.util.concurrent.TimeUnit;
 
 public class FireBasePhoneAuth extends AppCompatActivity implements
         View.OnClickListener{
-    private static final String TAG = "PhoneAuthActivity";
+    private static final String TAG = "TAG";
 
     private static final String KEY_VERIFY_IN_PROGRESS = "key_verify_in_progress";
 
@@ -39,6 +41,9 @@ public class FireBasePhoneAuth extends AppCompatActivity implements
     private static final int STATE_VERIFY_SUCCESS = 4;
     private static final int STATE_SIGNIN_FAILED = 5;
     private static final int STATE_SIGNIN_SUCCESS = 6;
+
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
 
     // [START declare_auth]
     private FirebaseAuth mAuth;
@@ -62,32 +67,14 @@ public class FireBasePhoneAuth extends AppCompatActivity implements
     private Button mVerifyButton;
     private Button mResendButton;
     private Button mSignOutButton;
-/*    public FirebaseAuth mAuth;
-    private Spinner citizenRole;
-    EditText citizenName, citizenAddress, citizenPhone, citizenDOB, citizenPassword, citizenEmail, citizenConfirmPassword;
-    Button signUpButton;
-    UserDetails userDetails;
-    String tempUserName ;
-    String tempUserAddress ;
-    String tempUserPhone ;
-    String tempUserDOB;
-    String tempUserEmail ;
-    String tempUserPassword ;
-    String tempUserConfirmPassword ;
-    String tempUserRole;
-    ProgressBar progressBar;
-
-    DatabaseReference database;
-    private ProgressDialog progressDialog;
-    PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks;
-    PhoneAuthProvider.ForceResendingToken mResendToken;
-    String mVerificationId;*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_firebase_phone_auth);
 
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        editor = sharedPreferences.edit();
 
         // Restore instance state
         if (savedInstanceState != null) {
@@ -115,8 +102,6 @@ public class FireBasePhoneAuth extends AppCompatActivity implements
         mResendButton.setOnClickListener(this);
         mSignOutButton.setOnClickListener(this);
 
-        // [START initialize_auth]
-        // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
         // [END initialize_auth]
 
@@ -132,7 +117,7 @@ public class FireBasePhoneAuth extends AppCompatActivity implements
                 // 2 - Auto-retrieval. On some devices Google Play services can automatically
                 //     detect the incoming verification SMS and perform verification without
                 //     user action.
-                Log.d(TAG, "onVerificationCompleted:" + credential);
+                Log.d(TAG, "onVerificationCompleted:" + credential.getProvider());
                 // [START_EXCLUDE silent]
                 mVerificationInProgress = false;
                 // [END_EXCLUDE]
@@ -143,6 +128,7 @@ public class FireBasePhoneAuth extends AppCompatActivity implements
                 // [END_EXCLUDE]
                 signInWithPhoneAuthCredential(credential);
             }
+
 
             @Override
             public void onVerificationFailed(FirebaseException e) {
@@ -256,16 +242,19 @@ public class FireBasePhoneAuth extends AppCompatActivity implements
     // [END resend_verification]
 
     // [START sign_in_with_phone]
-    private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
+    private void signInWithPhoneAuthCredential(final PhoneAuthCredential credential) {
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithCredential:success");
+                            Log.i("TAG", "signInWithCredential:success:"+credential);
 
                             FirebaseUser user = task.getResult().getUser();
+
+                            Log.d(TAG, "FireUser1:"+user.getUid());
+
                             // [START_EXCLUDE]
                             updateUI(STATE_SIGNIN_SUCCESS, user);
                             // [END_EXCLUDE]
@@ -340,9 +329,7 @@ public class FireBasePhoneAuth extends AppCompatActivity implements
                 mDetailText.setText(R.string.status_verification_succeeded);*/
 
                 //GOTO EMAIL AND FULLNAME REGISTER
-                Intent intent = new Intent(this,GoogleSignUp.class);
-                intent.putExtra("phoneNumber",mPhoneNumberField.getText().toString());
-                startActivity(intent);
+
 
                 // Set the verification text based on the credential
               /*  if (cred != null) {
@@ -360,8 +347,14 @@ public class FireBasePhoneAuth extends AppCompatActivity implements
                 break;
             case STATE_SIGNIN_SUCCESS:
                 // Np-op, handled by sign-in check
+                editor.putString("uid",user.getUid());
+                editor.commit();
+
                 Intent intent1 = new Intent(this,GoogleSignUp.class);
                 intent1.putExtra("phoneNumber",mPhoneNumberField.getText().toString());
+                intent1.putExtra("uid",user.getUid());
+
+                //PUT THE FIREBASE USER DATA IN SHARED PREFERENCE
                 startActivity(intent1);
                 break;
         }

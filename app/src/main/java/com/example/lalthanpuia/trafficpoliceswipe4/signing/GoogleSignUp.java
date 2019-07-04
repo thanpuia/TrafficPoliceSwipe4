@@ -22,8 +22,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import es.dmoral.toasty.Toasty;
 
@@ -37,7 +40,7 @@ public class GoogleSignUp extends AppCompatActivity {
     String tempUserEmail ;
     String tempUserPassword ;
     String tempUserConfirmPassword ;
-    String phoneNumber;
+    String phoneNumber, uid;
     ProgressBar progressBar;
 
     DatabaseReference database;
@@ -53,23 +56,27 @@ public class GoogleSignUp extends AppCompatActivity {
         database = FirebaseDatabase.getInstance().getReference("user_details");
 
         citizenName = findViewById(R.id.citizenName);
-
         citizenEmail = findViewById(R.id.citizenEmail);
         citizenPassword = findViewById(R.id.citizenPassword);
         citizenConfirmPassword = findViewById(R.id.citizenConfirmPassword);
 
+
         signUpButton =findViewById(R.id.signUpButton);
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         editor = sharedPreferences.edit();
 
 
        // String username = sharedPreferences.getString("username","");
-
         Intent intent = getIntent();
         phoneNumber = intent.getStringExtra("phoneNumber");
+        uid = intent.getStringExtra("uid");
 
         userDetails = new UserDetails();
         mAuth = FirebaseAuth.getInstance();
+
+        //PREPOPULATE IF USER ALREADY EXIST
+        showProgressDialog();
+        prepopulateIfUserExist(uid);
 
     }
 
@@ -88,11 +95,9 @@ public class GoogleSignUp extends AppCompatActivity {
         showProgressDialog();
 
         tempUserName = citizenName.getText().toString();
-
         tempUserEmail = citizenEmail.getText().toString();
         tempUserPassword = citizenPassword.getText().toString();
         tempUserConfirmPassword = citizenConfirmPassword.getText().toString();
-
 
         editor.putString("fullName" , tempUserName);
         editor.putString("email" , tempUserEmail);
@@ -105,8 +110,11 @@ public class GoogleSignUp extends AppCompatActivity {
             dismissProgressDialog();
         } else {
             if (tempUserPassword.equals(tempUserConfirmPassword)){
+
                 //GOTO STEP:2
-                mAuth.createUserWithEmailAndPassword(tempUserEmail, tempUserPassword)
+                updateUI(uid);
+                dismissProgressDialog();
+                /*mAuth.createUserWithEmailAndPassword(tempUserEmail, tempUserPassword)
                         .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -125,7 +133,7 @@ public class GoogleSignUp extends AppCompatActivity {
                                 }
 
                             }
-                        });
+                        });*/
 
             }else{
                 //error pasword mismatch
@@ -133,6 +141,34 @@ public class GoogleSignUp extends AppCompatActivity {
                 Toasty.error(getApplicationContext(), "Password Mismatch", Toast.LENGTH_LONG, true).show();
             }
         }
+
+    }
+
+    public void prepopulateIfUserExist(String mUID) {
+
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("user_details/"+mUID);
+
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                UserDetails myUserDetails = dataSnapshot.getValue(UserDetails.class);
+
+                citizenName.setText(myUserDetails.getName());
+                citizenPassword.setText(myUserDetails.getPassword());
+                citizenConfirmPassword.setText(myUserDetails.getPassword());
+                citizenEmail.setText(myUserDetails.getEmail());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        dismissProgressDialog();
+
 
     }
 
@@ -151,25 +187,25 @@ public class GoogleSignUp extends AppCompatActivity {
             progressDialog.dismiss();
         }
     }
-    private void updateUI(FirebaseUser currentUser) {
+    private void  updateUI(String  uid) {
 
-        if(currentUser!=null){
-            String newKey = database.push().getKey();
+        if(uid!=null){
+            //String newKey = database.push().getKey();
 
-            editor.putString("userUniqueKey" ,newKey );
+            String Uid = uid;
+            editor.putString("userUniqueKey" ,Uid );
             editor.commit();
 
             Log.i("tag",""+citizenName.getText());
 
             userDetails = new UserDetails();
             userDetails.setName(tempUserName);
-
             userDetails.setEmail(tempUserEmail);
             userDetails.setPassword(tempUserPassword);
             userDetails.setPhone(phoneNumber);
+            userDetails.setRole("citizen");
 
-
-            database.child(newKey).setValue(userDetails).addOnCompleteListener(new OnCompleteListener<Void>() {
+            database.child(Uid).setValue(userDetails).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     signUpButton.setEnabled(true);
@@ -182,7 +218,10 @@ public class GoogleSignUp extends AppCompatActivity {
                 }
             });
 
-            Intent intent = new Intent(this, GoogleSignIn.class);
+            Intent intent = new Intent(this, MainActivity.class);
+
+            intent.putExtra("role","citizen");
+
             startActivity(intent);
         }
     }
