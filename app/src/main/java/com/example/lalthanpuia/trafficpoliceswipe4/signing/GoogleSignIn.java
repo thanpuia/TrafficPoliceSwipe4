@@ -1,5 +1,16 @@
 package com.example.lalthanpuia.trafficpoliceswipe4.signing;
+/*
+*
+*
+*
+* //TODO: HEI ACTIVITY HI DELETE THEIH RENG
 
+ *
+*
+*
+*
+*
+* */
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -136,7 +147,7 @@ public class GoogleSignIn extends AppCompatActivity {
                     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                         String email = (String) dataSnapshot.child("email").getValue();
 
-                        if (email.equals(currentUser.getEmail())){
+                     /*   if (email.equals(currentUser.getEmail())){
                             String role = (String) dataSnapshot.child("role").getValue();
 
                             String userKey = dataSnapshot.getKey();
@@ -146,7 +157,7 @@ public class GoogleSignIn extends AppCompatActivity {
                             Log.v("TAG","tole "+role);
                             goToMainMenuWithTheRole(role,email);
                             return;
-                        }
+                        }*/
                     }
                     @Override public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }@Override public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) { }@Override public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }@Override public void onCancelled(@NonNull DatabaseError databaseError) { }
                 });

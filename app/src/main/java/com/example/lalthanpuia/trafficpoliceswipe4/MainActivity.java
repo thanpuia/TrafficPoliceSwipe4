@@ -225,7 +225,10 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
     public void twoclick(View view) {
-        intent.putExtra("click","2");
+
+        Intent intent = new Intent(this, ReportSubmitActivity.class);
+
+        //intent.putExtra("click","2");
         startActivity(intent);
     }
     public void threeclick(View view) {

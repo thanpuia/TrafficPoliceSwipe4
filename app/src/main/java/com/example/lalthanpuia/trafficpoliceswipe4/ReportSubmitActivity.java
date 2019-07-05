@@ -1,20 +1,7 @@
 package com.example.lalthanpuia.trafficpoliceswipe4;
 
-
-/*
-*
-*
-*
-* TODO: HE FRAGMENT HI DELETE THEIH
-*
-*
-*
-* */
-
 import android.Manifest;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -23,44 +10,33 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
-import android.os.Build;
-import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.example.lalthanpuia.trafficpoliceswipe4.signing.GoogleSignIn;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -69,21 +45,12 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
 
-import es.dmoral.toasty.Toasty;
-
-import static android.app.Activity.RESULT_OK;
-
-/**
- * A simple {@link Fragment} subclass.
- */
-public class ItemTwoFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, ActivityCompat.OnRequestPermissionsResultCallback {
+public class ReportSubmitActivity extends AppCompatActivity  implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, ActivityCompat.OnRequestPermissionsResultCallback {
 
     private static final String TAG = "MyApps-Location2";
 
@@ -92,7 +59,7 @@ public class ItemTwoFragment extends Fragment implements GoogleApiClient.Connect
     private LocationRequest locationRequest;
 
     EditText et_admin, et_date, et_message;
-    Button button, chooseImg, upload;
+    Button  chooseImg, upload;
     private ImageView imageView;
     private Uri filePath;
     FirebaseStorage storage;
@@ -116,46 +83,50 @@ public class ItemTwoFragment extends Fragment implements GoogleApiClient.Connect
     String shared_phone;
     String shared_Uid;
     boolean imageSelect = false;
+    FrameLayout button ;
 
-   // public static ArrayList<String> userPostUniqueIdLists;
+    // public static ArrayList<String> userPostUniqueIdLists;
 
     String newKey;
-    public static ItemTwoFragment newInstance() {
-        ItemTwoFragment fragment = new ItemTwoFragment();
-        return fragment;
-    }
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_report_submit);
 
-    public ItemTwoFragment() {
-        // Required empty public constructor
+        toolbar = (Toolbar) findViewById(R.id.tool_bar);
+        toolbar.setNavigationIcon(R.drawable.back_arrow);
+        toolbar.setLogoDescription("sdf");
+
+        // Setting toolbar as the ActionBar with setSupportActionBar() call
+        setSupportActionBar(toolbar);
+
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
 
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_item_two, container, false);
 
         pictureUrl = "images/" + UUID.randomUUID().toString();
 
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         //GETTING THE SHARED PREFERENCES:
-        //shared_userUniqueKey = sharedPreferences.getString("userUniqueKey","");
-        //shared_fullName = sharedPreferences.getString("fullName","");
-        //shared_email = sharedPreferences.getString("email","");
-        //shared_phone = sharedPreferences.getString("phone","");
         shared_Uid = sharedPreferences.getString("Uid","");
 
         Log.d("TAG","ItemTwoFragment/mAuth:"+ sharedPreferences.getString("fullName", null));
 
-        mGoogleApiClient = new GoogleApiClient.Builder(getContext())
+/*
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks((GoogleApiClient.ConnectionCallbacks) getApplicationContext())
+                .addOnConnectionFailedListener((GoogleApiClient.OnConnectionFailedListener) getApplicationContext())
+                .addApi(LocationServices.API).build();
+*/
+
+        GoogleApiClient mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API).build();
+                .addApi(LocationServices.API)
+                .build();
+
+
 
         LocationRequest mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(10000);
@@ -167,11 +138,11 @@ public class ItemTwoFragment extends Fragment implements GoogleApiClient.Connect
                 .checkLocationSettings(mGoogleApiClient, builder.build());
         mGoogleApiClient.connect();
 
-        et_message = view.findViewById(R.id.et_message);
-        button = view.findViewById(R.id.button);
-        chooseImg = view.findViewById(R.id.chooseImage);
+        et_message =findViewById(R.id.et_message);
+        button = findViewById(R.id.button);
+        chooseImg = findViewById(R.id.chooseImage);
         //upload = view.findViewById(R.id.upload);
-        imageView = view.findViewById(R.id.imgView);
+        imageView = findViewById(R.id.imgView);
         database = FirebaseDatabase.getInstance().getReference();
 
         // get the current date and time in human readable format
@@ -181,39 +152,23 @@ public class ItemTwoFragment extends Fragment implements GoogleApiClient.Connect
             @Override
             public void onClick(View view) {
 
-               updateIntoAdminNotification();
-               if(imageSelect) {//CHOOSE PICTURE IS TRUE
+                updateIntoAdminNotification();
+                if(imageSelect) {//CHOOSE PICTURE IS TRUE
                     uploadImage();
-               }
-               updateIntoUserAccount();
+                }
+                updateIntoUserAccount();
 
             }
         });
-        
-        chooseImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                chooseImage();
-            }
-        });
 
-      /*  upload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                uploadImage();
-            }
-        });*/
+//        chooseImg.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                chooseImage();
+//            }
+//        });
 
-      //  getUserPostIds();//FOR FURTHER USE
-      // myRef.push().setValue("33");
-        return view;
-    }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-
-       // inflater.inflate(R.menu.forecastfragment, menu);
-       // return true;
     }
 
     private void updateIntoAdminNotification() {
@@ -223,7 +178,7 @@ public class ItemTwoFragment extends Fragment implements GoogleApiClient.Connect
 
         String message = String.valueOf(et_message.getText());
 
-        if (message.equals("")) { Toast.makeText(getContext(), "Enter something", Toast.LENGTH_SHORT).show();
+        if (message.equals("")) { Toast.makeText(getApplicationContext(), "Enter something", Toast.LENGTH_SHORT).show();
         } else {
             database.child("notifications/" + newKey).child("admin").setValue("admin");
             database.child("notifications/" + newKey).child("date").setValue(currentDateandTime);
@@ -245,7 +200,7 @@ public class ItemTwoFragment extends Fragment implements GoogleApiClient.Connect
 
             //GETTING THE LOCATION
 
-            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
                 //    ActivityCompat#requestPermissions
                 // here to request the missing permissions, and then overriding
@@ -294,7 +249,7 @@ public class ItemTwoFragment extends Fragment implements GoogleApiClient.Connect
         {
             filePath = data.getData();
             try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), filePath);
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), filePath);
                 imageView.setImageBitmap(bitmap);
                 imageSelect = true;
             }
@@ -308,7 +263,7 @@ public class ItemTwoFragment extends Fragment implements GoogleApiClient.Connect
 
         if(filePath != null)
         {
-            final ProgressDialog progressDialog = new ProgressDialog(getContext());
+            final ProgressDialog progressDialog = new ProgressDialog(getApplicationContext());
             progressDialog.setTitle("Uploading...");
             progressDialog.show();
 
@@ -321,7 +276,7 @@ public class ItemTwoFragment extends Fragment implements GoogleApiClient.Connect
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             progressDialog.dismiss();
-                            Toast.makeText(getContext(), "Uploaded", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Uploaded", Toast.LENGTH_SHORT).show();
 
                         }
                     })
@@ -329,7 +284,7 @@ public class ItemTwoFragment extends Fragment implements GoogleApiClient.Connect
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             progressDialog.dismiss();
-                            Toast.makeText(getContext(), "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
 
                         }
                     })
@@ -344,11 +299,36 @@ public class ItemTwoFragment extends Fragment implements GoogleApiClient.Connect
         }
     }
 
-    @Override
+
     public void onConnected(@Nullable Bundle bundle) { }
-    @Override
+
     public void onConnectionSuspended(int i) { }
-    @Override
+
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) { }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.report_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.profileEdit) {
+
+
+            return true;
+
+        }else if (id == R.id.logout){
+
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
 }

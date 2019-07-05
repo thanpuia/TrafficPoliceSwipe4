@@ -18,7 +18,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".police.PoliceIncharge"></activity>
+        <activity android:name=".ReportSubmitActivity"
+            android:theme="@style/AppTheme2.NoActionBar"
+            ></activity>
+        <activity android:name=".police.PoliceIncharge" />
         <activity android:name=".FragmentHolderActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
