@@ -22,10 +22,15 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -93,6 +98,7 @@ public class ItemTwoFragment extends Fragment implements GoogleApiClient.Connect
 
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
+    private Toolbar toolbar;
 
     String shared_userUniqueKey;
     String shared_fullName;
@@ -119,8 +125,13 @@ public class ItemTwoFragment extends Fragment implements GoogleApiClient.Connect
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_item_two, container, false);
+        getActivity().requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        toolbar = view.findViewById(R.id.tool_bar);
+
         pictureUrl = "images/" + UUID.randomUUID().toString();
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
@@ -189,6 +200,13 @@ public class ItemTwoFragment extends Fragment implements GoogleApiClient.Connect
       //  getUserPostIds();//FOR FURTHER USE
       // myRef.push().setValue("33");
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
+       // inflater.inflate(R.menu.forecastfragment, menu);
+       // return true;
     }
 
     private void updateIntoAdminNotification() {
@@ -318,13 +336,12 @@ public class ItemTwoFragment extends Fragment implements GoogleApiClient.Connect
                     });
         }
     }
+
     @Override
     public void onConnected(@Nullable Bundle bundle) { }
     @Override
     public void onConnectionSuspended(int i) { }
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) { }
-
-
 
 }

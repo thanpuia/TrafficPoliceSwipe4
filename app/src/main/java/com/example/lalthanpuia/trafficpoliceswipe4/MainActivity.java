@@ -27,6 +27,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 
 import com.example.lalthanpuia.trafficpoliceswipe4.signing.GoogleSignIn;
 import com.google.firebase.auth.FirebaseUser;
@@ -72,6 +73,8 @@ public class MainActivity extends AppCompatActivity {
 
     SharedPreferences sharedPreferences;
 
+    FrameLayout singleUserFeedFrame, globalNotifyFrame;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,10 +101,10 @@ public class MainActivity extends AppCompatActivity {
         policeName.add("");
 
         adminfeedButton = findViewById(R.id.adminFeedButton);
-        reportButton = findViewById(R.id.reportButton);
-        singleUserFeedButton = findViewById(R.id.singleUserFeedButton);
+       // reportButton = findViewById(R.id.reportButton);
+        singleUserFeedFrame = findViewById(R.id.singleUserFeed);
         adminGlobalSenderButton = findViewById(R.id.adminGlobalSenderButton);
-        globalNotifyButton = findViewById(R.id.globalNotityButton);
+        globalNotifyFrame = findViewById(R.id.globalNotificationFrame);
 
         //FIRST CHECK THE SHARED PREFERENCE
        // sharedPreferences = this.getSharedPreferences("com.example.lalthanpuia.trafficpoliceswipe4.signing", Context.MODE_PRIVATE);

@@ -6,6 +6,10 @@
     tools:context=".ItemTwoFragment">
 
 
+    <include
+        android:id="@+id/tool_bar"
+        layout="@layout/tool_bar" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">

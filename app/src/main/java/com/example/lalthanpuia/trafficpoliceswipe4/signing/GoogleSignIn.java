@@ -54,6 +54,9 @@ public class GoogleSignIn extends AppCompatActivity {
         userEmail = findViewById(R.id.userEmail);
         userPassword = findViewById(R.id.userPassword);
 
+        //TODO: HE ACTIVITY HI PAIH A NGAIH VANG IN PHONE AUTH AH KHAIN KA KAL TIR NGHAL
+        startActivity(new Intent(this, FireBasePhoneAuth.class));
+
     }
 
     public void signUpClick(View view) {

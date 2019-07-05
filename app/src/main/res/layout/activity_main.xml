@@ -12,11 +12,28 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/imageView2"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:background="#81D4FA" />
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:background="@drawable/car" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:background="#A1181F4A"/>
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_marginTop="60dp"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_gravity="center|bottom"
+                android:src="@drawable/manplaceholder" />
+        </FrameLayout>
+
 
         <LinearLayout
             android:id="@+id/linearLayout"
@@ -44,6 +61,7 @@
 
 
         </LinearLayout>
+
         <LinearLayout
             android:id="@+id/linearLayout4"
             android:layout_width="match_parent"
@@ -51,21 +69,112 @@
             android:gravity="center"
             android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/reportButton"
-                android:layout_width="150dp"
-                android:layout_height="100dp"
-                android:onClick="twoclick"
-                android:text="Report" />
-            <Button
-                android:id="@+id/globalNotityButton"
-                android:layout_width="150dp"
-                android:layout_height="100dp"
-                android:onClick="eightclick"
-                android:text="Global notify" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dashboard_margin"
+                android:orientation="vertical">
 
+                <FrameLayout
+                    android:id="@+id/report"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="twoclick">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:layout_width="@dimen/dashboard_cirlce"
+                        android:layout_height="@dimen/dashboard_cirlce"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@color/report" />
+
+                    <ImageView
+                        android:layout_width="@dimen/dashboard_cirlce_inside"
+                        android:layout_height="@dimen/dashboard_cirlce_inside"
+                        android:layout_gravity="center"
+                        android:src="@drawable/report" />
+
+
+                </FrameLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Report"
+                    android:layout_gravity="center"/>
+                
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dashboard_margin"
+
+                android:orientation="vertical">
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:id="@+id/singleUserFeed"
+                    android:onClick="fourclick">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:layout_width="@dimen/dashboard_cirlce"
+                        android:layout_height="@dimen/dashboard_cirlce"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@color/list_of_report"
+                        android:foregroundGravity="center"
+                       />
+
+                    <ImageView
+                        android:layout_width="@dimen/dashboard_cirlce_inside"
+                        android:layout_height="@dimen/dashboard_cirlce_inside"
+                        android:layout_gravity="center"
+                        android:src="@drawable/profiles" />
+
+
+                </FrameLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="List of Report"
+                    android:textAlignment="center"
+                    android:layout_gravity="center"/>
+            </LinearLayout>
 
         </LinearLayout>
+        <!--<LinearLayout-->
+            <!--android:id="@+id/linearLayout4"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:gravity="center"-->
+            <!--android:orientation="horizontal">-->
+
+            <!--<de.hdodenhof.circleimageview.CircleImageView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content" />-->
+            <!---->
+            <!--<Button-->
+                <!--android:id="@+id/reportButton"-->
+                <!--android:layout_width="150dp"-->
+                <!--android:layout_height="100dp"-->
+                <!--android:onClick="twoclick"-->
+                <!--android:text="Report" />-->
+            <!--<Button-->
+                <!--android:id="@+id/globalNotityButton"-->
+                <!--android:layout_width="150dp"-->
+                <!--android:layout_height="100dp"-->
+                <!--android:onClick="eightclick"-->
+                <!--android:text="Global notify" />-->
+
+
+        <!--</LinearLayout>-->
+
+
+
         <LinearLayout
             android:id="@+id/linearLayout2"
             android:layout_width="match_parent"
@@ -73,20 +182,82 @@
             android:gravity="center"
             android:orientation="horizontal">
 
-            <Button
-                android:layout_width="150dp"
-                android:layout_height="100dp"
-                android:onClick="threeclick"
-                android:text="Camera" />
 
-            <Button
-                android:id="@+id/singleUserFeedButton"
-                android:layout_width="150dp"
-                android:layout_height="100dp"
-                android:onClick="fourclick"
-                android:text="Single user feed" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_margin="@dimen/dashboard_margin"
+                android:onClick="eightclick">
+
+                <FrameLayout
+                    android:id="@+id/globalNotificationFrame"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:layout_width="@dimen/dashboard_cirlce"
+                        android:layout_height="@dimen/dashboard_cirlce"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@color/global_notification" />
+
+                    <ImageView
+                        android:layout_width="@dimen/dashboard_cirlce_inside"
+                        android:layout_height="@dimen/dashboard_cirlce_inside"
+                        android:layout_gravity="center"
+                        android:src="@drawable/glsobal" />
+
+
+                </FrameLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Global\nNotification"
+                    android:textAlignment="center"
+                    android:layout_gravity="center"/>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_margin="@dimen/dashboard_margin"
+                >
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:onClick="fourclick">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:layout_width="@dimen/dashboard_cirlce"
+                        android:layout_height="@dimen/dashboard_cirlce"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@color/rules_and_regulation"
+                        />
+
+                    <ImageView
+                        android:layout_width="@dimen/dashboard_cirlce_inside"
+                        android:layout_height="@dimen/dashboard_cirlce_inside"
+                        android:layout_gravity="center"
+                        android:src="@drawable/law" />
+
+                </FrameLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Rules &amp;\n Regulation"
+                    android:textAlignment="center"
+                    android:layout_gravity="center"/>
+            </LinearLayout>
 
         </LinearLayout>
+<!--
 
         <LinearLayout
             android:id="@+id/linearLayout3"
@@ -108,6 +279,7 @@
                 android:text="log out" />
 
         </LinearLayout>
+-->
 
 
 

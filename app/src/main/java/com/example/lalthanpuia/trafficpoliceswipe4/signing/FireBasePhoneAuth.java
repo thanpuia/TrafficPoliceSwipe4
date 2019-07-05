@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.lalthanpuia.trafficpoliceswipe4.MainActivity;
 import com.example.lalthanpuia.trafficpoliceswipe4.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -75,6 +76,12 @@ public class FireBasePhoneAuth extends AppCompatActivity implements
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         editor = sharedPreferences.edit();
+
+        String uid = sharedPreferences.getString("uid","");
+
+        if(uid.equals("")){//NOT NULl
+
+        }else startActivity(new Intent(this,MainActivity.class));
 
         // Restore instance state
         if (savedInstanceState != null) {
