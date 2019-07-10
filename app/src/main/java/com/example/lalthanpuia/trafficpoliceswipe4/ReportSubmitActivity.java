@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -50,6 +51,8 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
 
+import es.dmoral.toasty.Toasty;
+
 public class ReportSubmitActivity extends AppCompatActivity  implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, ActivityCompat.OnRequestPermissionsResultCallback {
 
     private static final String TAG = "MyApps-Location2";
@@ -84,6 +87,8 @@ public class ReportSubmitActivity extends AppCompatActivity  implements GoogleAp
     String shared_Uid;
     boolean imageSelect = false;
     FrameLayout button ;
+    static String reportTitle="";
+    EditText reportTitleEdittext;
 
     // public static ArrayList<String> userPostUniqueIdLists;
 
@@ -95,10 +100,13 @@ public class ReportSubmitActivity extends AppCompatActivity  implements GoogleAp
 
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         toolbar.setNavigationIcon(R.drawable.back_arrow);
-        toolbar.setLogoDescription("sdf");
 
-        // Setting toolbar as the ActionBar with setSupportActionBar() call
+        toolbar.setTitleTextColor(Color.rgb(205,163,128));
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setTitle("Submit Report");
+        // Setting toolbar as the ActionBar with setSupportActionBar() call
 
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
@@ -140,13 +148,20 @@ public class ReportSubmitActivity extends AppCompatActivity  implements GoogleAp
 
         et_message =findViewById(R.id.et_message);
         button = findViewById(R.id.button);
-        chooseImg = findViewById(R.id.chooseImage);
+       // chooseImg = findViewById(R.id.chooseImage);
         //upload = view.findViewById(R.id.upload);
-        imageView = findViewById(R.id.imgView);
+        //imageView = findViewById(R.id.imgView);
+        reportTitleEdittext = findViewById(R.id.reportTitle);
+
         database = FirebaseDatabase.getInstance().getReference();
 
         // get the current date and time in human readable format
         sdf = new SimpleDateFormat("HH:mm dd,MMMM", Locale.ENGLISH);
+
+        //Put the title
+        if(!reportTitle.equals(""))
+            reportTitleEdittext.setText(reportTitle);
+
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -316,19 +331,35 @@ public class ReportSubmitActivity extends AppCompatActivity  implements GoogleAp
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        int id = item.getItemId();
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // todo: goto back activity from here
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.profileEdit) {
+                Intent intent = new Intent(ReportSubmitActivity.this, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
+                return true;
+
+            case R.id.profileEdit: ;return true;
+
+            case R.id.logout: ;return  true;
 
 
-            return true;
-
-        }else if (id == R.id.logout){
-
-            return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
+
+
+
+
     }
 
+    public void reportlistClick(View view) {
+    }
+
+    public void listbuttonClick(View view) {
+        startActivity(new Intent(this, ListOfReportTitlesActivity.class));
+
+    }
 }

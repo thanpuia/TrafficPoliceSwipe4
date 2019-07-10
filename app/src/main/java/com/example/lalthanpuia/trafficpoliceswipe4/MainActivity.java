@@ -111,7 +111,10 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intentfromSigin = getIntent();
 
-        String role = (String) intentfromSigin.getStringExtra("role");
+        //Not from intent, but from sharedPreference
+        //String role = (String) intentfromSigin.getStringExtra("role");
+
+        String role = sharedPreferences.getString("role","");
         Log.v("TAG","ROle from MainActivigy"+ role);
 
         //HIDE THE BUTTON IF THE USER IS ADMIN
@@ -182,7 +185,8 @@ public class MainActivity extends AppCompatActivity {
                         return true;
 
                     }
-                });*/
+                });
+        */
 
 
         //GETTING THE POLICE NAMES FOR THE HINT

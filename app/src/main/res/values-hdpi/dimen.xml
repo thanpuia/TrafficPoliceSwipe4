@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <dimen name="dashboard_cirlce">50dp</dimen>
-    <dimen name="dashboard_cirlce_inside">30dp</dimen>
+    <dimen name="dashboard_cirlce">55dp</dimen>
+    <dimen name="dashboard_cirlce_inside">28dp</dimen>
 
     <dimen name="dashboard_margin">20dp</dimen>
 

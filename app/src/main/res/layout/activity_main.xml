@@ -19,12 +19,9 @@
                 android:id="@+id/imageView2"
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
-                android:background="@drawable/car" />
+                android:background="@drawable/cars" />
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="120dp"
-                android:background="#A1181F4A"/>
+
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:layout_marginTop="60dp"
@@ -91,7 +88,7 @@
                         android:layout_width="@dimen/dashboard_cirlce_inside"
                         android:layout_height="@dimen/dashboard_cirlce_inside"
                         android:layout_gravity="center"
-                        android:src="@drawable/report" />
+                        android:src="@drawable/ic_report" />
 
 
                 </FrameLayout>
@@ -132,7 +129,7 @@
                         android:layout_width="@dimen/dashboard_cirlce_inside"
                         android:layout_height="@dimen/dashboard_cirlce_inside"
                         android:layout_gravity="center"
-                        android:src="@drawable/profiles" />
+                        android:src="@drawable/ic_profiles" />
 
 
                 </FrameLayout>
@@ -206,7 +203,7 @@
                         android:layout_width="@dimen/dashboard_cirlce_inside"
                         android:layout_height="@dimen/dashboard_cirlce_inside"
                         android:layout_gravity="center"
-                        android:src="@drawable/glsobal" />
+                        android:src="@drawable/ic_glsobal" />
 
 
                 </FrameLayout>
@@ -244,7 +241,7 @@
                         android:layout_width="@dimen/dashboard_cirlce_inside"
                         android:layout_height="@dimen/dashboard_cirlce_inside"
                         android:layout_gravity="center"
-                        android:src="@drawable/law" />
+                        android:src="@drawable/ic_law" />
 
                 </FrameLayout>
 

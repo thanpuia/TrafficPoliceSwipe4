@@ -19,7 +19,7 @@ public class FragmentHolderActivity extends AppCompatActivity {
 
         String getString = intent.getStringExtra("click");
         ItemOneFragment itemOneFragment = null;
-        ItemTwoFragment itemTwoFragment = null;
+        //ItemTwoFragment itemTwoFragment = null;
         ItemThreeFragment itemThreeFragment = null;
         ItemFourFragment itemFourFragment = null;
         SingleUserFeed singleUserFeed = null;
@@ -36,8 +36,8 @@ public class FragmentHolderActivity extends AppCompatActivity {
                 break;
 
             case "2":
-                itemTwoFragment = ItemTwoFragment.newInstance();
-                transaction.replace(R.id.frame_layout, itemTwoFragment);
+              //  itemTwoFragment = ItemTwoFragment.newInstance();
+               // transaction.replace(R.id.frame_layout, itemTwoFragment);
                 break;
 
             case "3":
@@ -48,7 +48,7 @@ public class FragmentHolderActivity extends AppCompatActivity {
                 break;
 
             case "4":
-                itemTwoFragment = ItemTwoFragment.newInstance();
+             //   itemTwoFragment = ItemTwoFragment.newInstance();
                 // itemFourFragment = ItemFourFragment.newInstance();
                 // transaction.replace(R.id.frame_layout,itemFourFragment);
                 singleUserFeed = new SingleUserFeed();

@@ -81,7 +81,7 @@
     </style>
 
     <style name="OverFlow" parent="Widget.AppCompat.ActionButton.Overflow">
-        <item name="android:src">@drawable/hamberger_menu</item>
+        <item name="android:src">@drawable/ham_menu_toolbar</item>
 
     </style>
 </resources>

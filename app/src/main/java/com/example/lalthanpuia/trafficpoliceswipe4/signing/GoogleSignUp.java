@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.lalthanpuia.trafficpoliceswipe4.MainActivity;
@@ -28,18 +29,22 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import es.dmoral.toasty.Toasty;
 
 public class GoogleSignUp extends AppCompatActivity {
     public FirebaseAuth mAuth;
-    EditText citizenName, citizenPassword, citizenEmail, citizenConfirmPassword;
+    EditText citizenName, citizenEmail;
     Button signUpButton;
     UserDetails userDetails;
     String tempUserName ;
+    TextView phoneNumberTV;
 
     String tempUserEmail ;
-    String tempUserPassword ;
-    String tempUserConfirmPassword ;
+   // String tempUserPassword ;
+    //String tempUserConfirmPassword ;
     String phoneNumber, uid;
     ProgressBar progressBar;
 
@@ -57,8 +62,9 @@ public class GoogleSignUp extends AppCompatActivity {
 
         citizenName = findViewById(R.id.citizenName);
         citizenEmail = findViewById(R.id.citizenEmail);
-        citizenPassword = findViewById(R.id.citizenPassword);
-        citizenConfirmPassword = findViewById(R.id.citizenConfirmPassword);
+        phoneNumberTV = findViewById(R.id.phoneNumberTV);
+     //   citizenPassword = findViewById(R.id.citizenPassword);
+       // citizenConfirmPassword = findViewById(R.id.citizenConfirmPassword);
 
 
         signUpButton =findViewById(R.id.signUpButton);
@@ -71,6 +77,7 @@ public class GoogleSignUp extends AppCompatActivity {
         phoneNumber = intent.getStringExtra("phoneNumber");
         uid = intent.getStringExtra("uid");
 
+        phoneNumberTV.setText(phoneNumber);
         userDetails = new UserDetails();
         mAuth = FirebaseAuth.getInstance();
 
@@ -98,24 +105,21 @@ public class GoogleSignUp extends AppCompatActivity {
 
         tempUserName = citizenName.getText().toString();
         tempUserEmail = citizenEmail.getText().toString();
-        tempUserPassword = citizenPassword.getText().toString();
-        tempUserConfirmPassword = citizenConfirmPassword.getText().toString();
+     //   tempUserPassword = citizenPassword.getText().toString();
+     //   tempUserConfirmPassword = citizenConfirmPassword.getText().toString();
 
-        editor.putString("fullName" , tempUserName);
-        editor.putString("email" , tempUserEmail);
-        editor.putString("phoneNumber" , phoneNumber);
-        editor.commit();
+
 
         // 1. IF PASSWORD MATCH
-        if(tempUserName.isEmpty() || tempUserEmail.isEmpty() || tempUserPassword.isEmpty() || tempUserConfirmPassword.isEmpty() ){
+        if(tempUserName.isEmpty() || tempUserEmail.isEmpty() ){
             Toasty.error(getApplicationContext(), "Fill everything", Toast.LENGTH_SHORT, true).show();
             dismissProgressDialog();
         } else {
-            if (tempUserPassword.equals(tempUserConfirmPassword)){
 
                 //GOTO STEP:2
                 updateUI(uid);
                 dismissProgressDialog();
+
                 /*mAuth.createUserWithEmailAndPassword(tempUserEmail, tempUserPassword)
                         .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                             @Override
@@ -137,31 +141,56 @@ public class GoogleSignUp extends AppCompatActivity {
                             }
                         });*/
 
-            }else{
-                //error pasword mismatch
-                dismissProgressDialog();
-                Toasty.error(getApplicationContext(), "Password Mismatch", Toast.LENGTH_LONG, true).show();
             }
-        }
+
 
     }
 
-    public void prepopulateIfUserExist(String mUID) {
+    public void prepopulateIfUserExist(final String mUID) {
 
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("user_details/"+mUID);
 
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                UserDetails myUserDetails = dataSnapshot.getValue(UserDetails.class);
 
-                citizenName.setText(myUserDetails.getName());
-                citizenPassword.setText(myUserDetails.getPassword());
-                citizenConfirmPassword.setText(myUserDetails.getPassword());
-                citizenEmail.setText(myUserDetails.getEmail());
-            }
+               // DataSnapshot messageSnapshot = (DataSnapshot) dataSnapshot.getChildren();
+
+                String name = (String) dataSnapshot.child(mUID).getValue();
+                    //String message = (String) messageSnapshot.child("message").getValue();
+                Log.i("TAG", "datasnapshot+ " +dataSnapshot);
+
+
+                Log.i("TAG", "name+" +name );
+
+
+               // if(name == null){
+                    Log.i("TAG", "if+");
+             //   }else {
+                    UserDetails myUserDetails = dataSnapshot.getValue(UserDetails.class);
+                    Log.i("TAG", "else+");
+
+                    citizenName.setText(myUserDetails.getName());
+                    //citizenPassword.setText(myUserDetails.getPassword());
+                    //citizenConfirmPassword.setText(myUserDetails.getPassword());
+                    citizenEmail.setText(myUserDetails.getEmail());
+                    phoneNumberTV.setText(myUserDetails.getPhone());
+
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+
+                    //intent.putExtra("role","citizen");
+                    editor.putString("role","citizen");
+                    editor.putString("fullName" , tempUserName);
+                    editor.putString("email" , tempUserEmail);
+                    editor.putString("phoneNumber" , phoneNumber);
+
+                    editor.commit();
+
+                    startActivity(intent);
+                }
+           // }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -170,7 +199,6 @@ public class GoogleSignUp extends AppCompatActivity {
         });
 
         dismissProgressDialog();
-
 
     }
 
@@ -203,7 +231,7 @@ public class GoogleSignUp extends AppCompatActivity {
             userDetails = new UserDetails();
             userDetails.setName(tempUserName);
             userDetails.setEmail(tempUserEmail);
-            userDetails.setPassword(tempUserPassword);
+            //userDetails.setPassword(tempUserPassword);
             userDetails.setPhone(phoneNumber);
             userDetails.setRole("citizen");
 
@@ -213,8 +241,6 @@ public class GoogleSignUp extends AppCompatActivity {
                     signUpButton.setEnabled(true);
                     citizenName .setText("");
                     citizenEmail .setText("");
-                    citizenPassword .setText("");
-                    citizenConfirmPassword .setText("");
                     dismissProgressDialog();
                     Toasty.success(getApplicationContext(),"Registration Successful",Toasty.LENGTH_SHORT).show();
                 }
@@ -222,7 +248,12 @@ public class GoogleSignUp extends AppCompatActivity {
 
             Intent intent = new Intent(this, MainActivity.class);
 
-            intent.putExtra("role","citizen");
+            //intent.putExtra("role","citizen");
+            editor.putString("role", "citizen");
+            editor.putString("fullName" , tempUserName);
+            editor.putString("email" , tempUserEmail);
+            editor.putString("phoneNumber" , phoneNumber);
+            editor.commit();
 
             startActivity(intent);
         }

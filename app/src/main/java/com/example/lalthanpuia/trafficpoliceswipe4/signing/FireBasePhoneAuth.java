@@ -352,13 +352,14 @@ public class FireBasePhoneAuth extends AppCompatActivity implements
                 // No-op, handled by sign-in check
                 mDetailText.setText(R.string.status_sign_in_failed);
                 break;
+
             case STATE_SIGNIN_SUCCESS:
                 // Np-op, handled by sign-in check
                 editor.putString("uid",user.getUid());
                 editor.commit();
 
                 Intent intent1 = new Intent(this,GoogleSignUp.class);
-                intent1.putExtra("phoneNumber",mPhoneNumberField.getText().toString());
+                intent1.putExtra("phoneNumber",user.getPhoneNumber());
                 intent1.putExtra("uid",user.getUid());
 
                 //PUT THE FIREBASE USER DATA IN SHARED PREFERENCE
