@@ -24,7 +24,56 @@ import com.srx.widget.PullToLoadView;
 
 import java.util.ArrayList;
 
-
+/*
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ * TODO: THIS IS TO BE DELETED. A NEW ACTIVITY BETTER THAN THIS IS CREATE
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ * */
 /**
  * A simple {@link Fragment} subclass.
  */

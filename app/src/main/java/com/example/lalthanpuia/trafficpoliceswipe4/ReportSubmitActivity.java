@@ -85,6 +85,8 @@ public class ReportSubmitActivity extends AppCompatActivity  implements GoogleAp
     String shared_email;
     String shared_phone;
     String shared_Uid;
+    String shared_role;
+
     boolean imageSelect = false;
     FrameLayout button ;
     static String reportTitle="";
@@ -117,7 +119,13 @@ public class ReportSubmitActivity extends AppCompatActivity  implements GoogleAp
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         //GETTING THE SHARED PREFERENCES:
-        shared_Uid = sharedPreferences.getString("Uid","");
+        shared_Uid = sharedPreferences.getString("uid","");
+        shared_email = sharedPreferences.getString("email","");
+        shared_fullName = sharedPreferences.getString("fullName","");
+        Log.i("TAG","Shared FullName:"+shared_fullName);
+        shared_phone = sharedPreferences.getString("phoneNumber","");
+        shared_role = sharedPreferences.getString("role","");
+        Log.i("TAG","Shared Role:"+shared_role);
 
         Log.d("TAG","ItemTwoFragment/mAuth:"+ sharedPreferences.getString("fullName", null));
 
@@ -133,8 +141,6 @@ public class ReportSubmitActivity extends AppCompatActivity  implements GoogleAp
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
-
-
 
         LocationRequest mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(10000);
@@ -162,7 +168,6 @@ public class ReportSubmitActivity extends AppCompatActivity  implements GoogleAp
         if(!reportTitle.equals(""))
             reportTitleEdittext.setText(reportTitle);
 
-
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -172,7 +177,6 @@ public class ReportSubmitActivity extends AppCompatActivity  implements GoogleAp
                     uploadImage();
                 }
                 updateIntoUserAccount();
-
             }
         });
 
@@ -182,7 +186,6 @@ public class ReportSubmitActivity extends AppCompatActivity  implements GoogleAp
 //                chooseImage();
 //            }
 //        });
-
 
     }
 
@@ -195,12 +198,21 @@ public class ReportSubmitActivity extends AppCompatActivity  implements GoogleAp
 
         if (message.equals("")) { Toast.makeText(getApplicationContext(), "Enter something", Toast.LENGTH_SHORT).show();
         } else {
-            database.child("notifications/" + newKey).child("admin").setValue("admin");
+            database.child("notifications/" + newKey).child("admin").setValue(shared_role);
             database.child("notifications/" + newKey).child("date").setValue(currentDateandTime);
             database.child("notifications/" + newKey).child("message").setValue(message);
 
             timestamp = System.currentTimeMillis() / -1000;
             database.child("notifications/" + newKey).child("sortkey").setValue(timestamp);
+            database.child("notifications/" + newKey).child("sender_name").setValue(shared_fullName);
+            database.child("notifications/" + newKey).child("sender_phone").setValue(shared_phone);
+            database.child("notifications/" + newKey).child("sender_role").setValue(shared_role).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    et_message.setText("");
+                    Toasty.success(getApplicationContext(),"Report sent success!",Toasty.LENGTH_SHORT).show();
+                }
+            });
 
             //WITH PIC OR WITHOUT PIC CHECKER
             //Pic Embedded
@@ -232,20 +244,20 @@ public class ReportSubmitActivity extends AppCompatActivity  implements GoogleAp
             database.child("notifications/" + newKey).child("altitude").setValue(String.valueOf(lastLocation.getAltitude()));
             database.child("notifications/" + newKey).child("accuracy").setValue(String.valueOf(lastLocation.getAccuracy()));
             database.child("notifications/" + newKey).child("police_incharge").setValue("");
-            database.child("notifications/" + newKey).child("username").setValue(shared_fullName);
+          //  database.child("notifications/" + newKey).child("username").setValue(shared_fullName);
             database.child("notifications/" + newKey).child("user_phone").setValue(shared_phone);
 
 
 
         }
         // CLEAR THE FIELD
-        et_message.setText("");
+
     }
 
     private void updateIntoUserAccount() {
 
         String newPostUniqueKey = database.child("user_details/post_id").push().getKey();
-        database.child("user_details/"+shared_userUniqueKey+"/post_id").child(newPostUniqueKey).setValue(newKey);
+        database.child("user_details/"+shared_Uid+"/post_id").child(newPostUniqueKey).setValue(newKey);
     }
 
 

@@ -150,7 +150,7 @@ public class GoogleSignUp extends AppCompatActivity {
 
 
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("user_details/"+mUID);
+        final DatabaseReference myRef = database.getReference("user_details/"+mUID);
 
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -158,19 +158,19 @@ public class GoogleSignUp extends AppCompatActivity {
 
                // DataSnapshot messageSnapshot = (DataSnapshot) dataSnapshot.getChildren();
 
-                String name = (String) dataSnapshot.child(mUID).getValue();
+                //String name = (String) dataSnapshot.child(mUID).getValue();
                     //String message = (String) messageSnapshot.child("message").getValue();
                 Log.i("TAG", "datasnapshot+ " +dataSnapshot);
 
 
-                Log.i("TAG", "name+" +name );
+              //  Log.i("TAG", "name+" +name );
 
 
                // if(name == null){
                     Log.i("TAG", "if+");
              //   }else {
                     UserDetails myUserDetails = dataSnapshot.getValue(UserDetails.class);
-                    Log.i("TAG", "else+");
+                    Log.i("TAG", "datasnap:"+myUserDetails.getName());
 
                     citizenName.setText(myUserDetails.getName());
                     //citizenPassword.setText(myUserDetails.getPassword());
@@ -181,10 +181,13 @@ public class GoogleSignUp extends AppCompatActivity {
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
 
                     //intent.putExtra("role","citizen");
-                    editor.putString("role","citizen");
-                    editor.putString("fullName" , tempUserName);
-                    editor.putString("email" , tempUserEmail);
-                    editor.putString("phoneNumber" , phoneNumber);
+                    editor.putString("role",myUserDetails.getRole());
+                    editor.putString("fullName" , myUserDetails.getName());
+                    //Log.i("TAG","Name:"+tempUserName);
+
+                    editor.putString("email" , myUserDetails.getEmail());
+                    editor.putString("phoneNumber" , myUserDetails.getPhone());
+                 //   Log.i("TAG","Phone:"+phoneNumber);
 
                     editor.commit();
 
@@ -251,8 +254,12 @@ public class GoogleSignUp extends AppCompatActivity {
             //intent.putExtra("role","citizen");
             editor.putString("role", "citizen");
             editor.putString("fullName" , tempUserName);
+            Log.i("TAG","Name:"+tempUserName);
+
             editor.putString("email" , tempUserEmail);
             editor.putString("phoneNumber" , phoneNumber);
+            Log.i("TAG","Phone:"+phoneNumber);
+
             editor.commit();
 
             startActivity(intent);

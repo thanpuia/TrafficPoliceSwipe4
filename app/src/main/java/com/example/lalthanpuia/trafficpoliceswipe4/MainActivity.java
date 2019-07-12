@@ -240,8 +240,10 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
     public void fourclick(View view) {
-        intent.putExtra("click","4");
-        startActivity(intent);
+
+
+        //intent.putExtra("click","4");
+        startActivity(new Intent(this,SingleUserFeedNewActivity.class));
     }
     public void fiveclick(View view) {
         intent.putExtra("click","5");
