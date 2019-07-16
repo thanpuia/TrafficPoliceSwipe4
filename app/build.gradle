@@ -46,6 +46,9 @@ dependencies {
     implementation 'com.github.GrenderG:Toasty:1.4.1'
     implementation 'com.jpardogo.googleprogressbar:library:1.2.0'
     implementation 'de.hdodenhof:circleimageview:3.0.0'
+
+    implementation 'com.koushikdutta.ion:ion:2.+'
+
     //    // For developers using AndroidX in their applications
     //    implementation 'pub.devrel:easypermissions:3.0.0'
     //

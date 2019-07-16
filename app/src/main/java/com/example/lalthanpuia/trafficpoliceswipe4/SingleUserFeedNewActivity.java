@@ -54,15 +54,21 @@ public class SingleUserFeedNewActivity extends AppCompatActivity {
 
                 Map<String, String> td = (HashMap<String,String>) dataSnapshot.getValue();
 
-                if(td.values()!=null) {
-                    td.values();
-                    Log.i("TAG",";"+td.values());
-                    String s = String.valueOf(td.values());
+                try{
 
-                    postId = Arrays.asList(s.split(","));
-                    Log.i("TAG",";;;"+postId.get(1));
+                    if(td.values()!=null) {
+                        td.values();
+                        Log.i("TAG",";"+td.values());
+                        String s = String.valueOf(td.values());
 
-                }
+                        postId = Arrays.asList(s.split(","));
+                        Log.i("TAG",";;;"+postId.get(1));
+
+                        downloadSingleUserPost(postId);
+
+                    }
+                }catch (Exception e){}
+
             }
 
             @Override
@@ -70,6 +76,20 @@ public class SingleUserFeedNewActivity extends AppCompatActivity {
 
             }
         });
+
+    }
+
+    private void downloadSingleUserPost(List<String> postId) {
+
+
+            Ion.with(this)
+                    .load("GET",url)
+                    .asString()
+                    .setCallback(new FutureCallback<String>() {
+                        @Override
+                        public void onCompleted(Exception e, String result) {
+                            // do stuff with the result or error
+                        }});
 
     }
 }
