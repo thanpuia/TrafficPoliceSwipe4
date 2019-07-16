@@ -263,6 +263,7 @@ public class MainActivity extends AppCompatActivity {
 
             e.printStackTrace();
         }
+
     } public void sevenclick(View view) {
         intent.putExtra("click","7");
         startActivity(intent);
