@@ -49,6 +49,11 @@ dependencies {
 
     implementation 'com.koushikdutta.ion:ion:2.+'
 
+    //location api
+    // location play services
+    // dexter runtime permissions
+    implementation 'com.karumi:dexter:4.2.0'
+
     //    // For developers using AndroidX in their applications
     //    implementation 'pub.devrel:easypermissions:3.0.0'
     //

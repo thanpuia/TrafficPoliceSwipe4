@@ -12,25 +12,52 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <include
+            android:id="@+id/tool_bar"
+            layout="@layout/tool_bar" />
+
+
             <ImageView
                 android:id="@+id/imageView2"
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
                 android:background="@drawable/cars" />
 
-
-
-            <de.hdodenhof.circleimageview.CircleImageView
+<!--            <de.hdodenhof.circleimageview.CircleImageView
                 android:layout_marginTop="60dp"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
                 android:layout_gravity="center|bottom"
-                android:src="@drawable/manplaceholder" />
-        </FrameLayout>
+                android:src="@drawable/manplaceholder" />-->
 
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:background="#CDA380"/>
+
+            <TextView
+                android:id="@+id/userNameMainMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000"
+                android:layout_gravity="left|center"
+                android:paddingLeft="10dp"
+                android:text="Username"/>
+            <TextView
+                android:id="@+id/userphoneMainMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000"
+                android:paddingRight="10dp"
+                android:layout_gravity="right|center"
+                android:text="phone"/>
+
+        </FrameLayout>
 
         <LinearLayout
             android:id="@+id/linearLayout"

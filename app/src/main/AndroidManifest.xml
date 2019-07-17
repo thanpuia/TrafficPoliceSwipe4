@@ -52,7 +52,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ItemFiveActivity" />
-        <activity android:name=".MainActivity" />
+        <activity android:name=".MainActivity"
+            android:theme="@style/AppTheme2.NoActionBar"/>
         <activity android:name=".signing.AfterSignIn" />
         <activity android:name=".signing.GoogleSignUp" />
         <activity

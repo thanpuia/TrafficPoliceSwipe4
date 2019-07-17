@@ -47,7 +47,7 @@ public class FireBasePhoneAuth extends AppCompatActivity implements
     SharedPreferences.Editor editor;
 
     // [START declare_auth]
-    private FirebaseAuth mAuth;
+    private static FirebaseAuth mAuth;
     // [END declare_auth]
 
     private boolean mVerificationInProgress = false;
@@ -69,6 +69,8 @@ public class FireBasePhoneAuth extends AppCompatActivity implements
     private Button mResendButton;
     private Button mSignOutButton;
 
+    String uid;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,15 +79,27 @@ public class FireBasePhoneAuth extends AppCompatActivity implements
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         editor = sharedPreferences.edit();
 
-        String uid = sharedPreferences.getString("uid","");
+        uid = sharedPreferences.getString("uid","");
 
         if(uid.equals("")){//NOT NULl
 
-        }else startActivity(new Intent(this,MainActivity.class));
+        }else{
+            Intent intent = new  Intent(this,MainActivity.class);
+            startActivity(intent);
+            finish();
+
+        }
 
         // Restore instance state
         if (savedInstanceState != null) {
             onRestoreInstanceState(savedInstanceState);
+            if(uid.equals("")){//NOT NULl
+
+            }else{
+                Intent intent = new  Intent(this,MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
         }
 
         // Assign views
@@ -194,6 +208,13 @@ public class FireBasePhoneAuth extends AppCompatActivity implements
         FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
 
+        if(uid.equals("")){//NOT NULl
+
+        }else{
+            Intent intent = new  Intent(this,MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
         // [START_EXCLUDE]
         if (mVerificationInProgress && validatePhoneNumber()) {
             startPhoneNumberVerification(mPhoneNumberField.getText().toString());
@@ -284,7 +305,7 @@ public class FireBasePhoneAuth extends AppCompatActivity implements
     }
     // [END sign_in_with_phone]
 
-    private void signOut() {
+    public void signOut() {
         mAuth.signOut();
         updateUI(STATE_INITIALIZED);
     }
@@ -362,8 +383,10 @@ public class FireBasePhoneAuth extends AppCompatActivity implements
                 intent1.putExtra("phoneNumber",user.getPhoneNumber());
                 intent1.putExtra("uid",user.getUid());
 
+
                 //PUT THE FIREBASE USER DATA IN SHARED PREFERENCE
                 startActivity(intent1);
+                finish();
                 break;
         }
 

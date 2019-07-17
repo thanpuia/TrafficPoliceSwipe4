@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.LocationListener;
 
 import android.location.LocationManager;
@@ -28,8 +29,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
+import com.example.lalthanpuia.trafficpoliceswipe4.signing.FireBasePhoneAuth;
 import com.example.lalthanpuia.trafficpoliceswipe4.signing.GoogleSignIn;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -50,6 +54,7 @@ import static com.example.lalthanpuia.trafficpoliceswipe4.ItemOneFragment.MY_PER
 
 public class MainActivity extends AppCompatActivity {
 
+    private Toolbar toolbar;
     public static LocationManager locationManager;
     FirebaseStorage storage;
     StorageReference storageReference;
@@ -61,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
     DatabaseReference myRef_police;
     public static ArrayList<String> policeName, policeNameKey;
     Intent intent;
-    Button adminfeedButton, reportButton, singleUserFeedButton, adminGlobalSenderButton, globalNotifyButton;
+    Button adminfeedButton, reportButton, adminGlobalSenderButton, globalNotifyButton;
 
     BottomNavigationView bottomNavigationView;
     BottomNavigationViewHelper bottomNavigationViewHelper;
@@ -72,21 +77,37 @@ public class MainActivity extends AppCompatActivity {
     String shared_userUniqueKey;
 
     SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
 
     FrameLayout singleUserFeedFrame, globalNotifyFrame;
+    FirebaseAuth firebaseAuth;
+    TextView username, userphone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+///
+        toolbar = findViewById(R.id.tool_bar);
+        toolbar.setTitleTextColor(Color.rgb(205,163,128));
+        setSupportActionBar(toolbar);
+      //  getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setTitle("Traffic Apps");
+///
 
+        username = findViewById(R.id.userNameMainMenu);
+        userphone = findViewById(R.id.userphoneMainMenu);
+
+        firebaseAuth = FirebaseAuth.getInstance();
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        editor = sharedPreferences.edit();
 
         //GETTING THE SHARED PREFERENCES:
-        shared_userUniqueKey = sharedPreferences.getString("userUniqueKey","");
+      //  shared_userUniqueKey = sharedPreferences.getString("userUniqueKey","");
 
         getUserPostIds();
 //        checkLocationPermission();
@@ -119,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
 
         //HIDE THE BUTTON IF THE USER IS ADMIN
         if(role.equals("admin")){
-            singleUserFeedButton.setVisibility(View.GONE);
+           // singleUserFeedFrame.setVisibility(View.GONE);
         }
         else if(role.equals("citizen")){
             adminfeedButton.setVisibility(View.GONE);
@@ -218,6 +239,9 @@ public class MainActivity extends AppCompatActivity {
         tempTtransaction.commit();*/
 
         intent = new Intent(this, FragmentHolderActivity.class);
+
+        username.setText(sharedPreferences.getString("fullName",""));
+        userphone.setText(sharedPreferences.getString("phoneNumber",""));
     }
 /*
     public void logoutClick(View view) {
@@ -348,7 +372,7 @@ public class MainActivity extends AppCompatActivity {
 
     //GETTING ALL THE ID THAT THE USER HAVE POSTED . SO THAT IT CAN BE DL IN THE SingleUserFeed
     private void getUserPostIds() {
-        FirebaseDatabase database1;
+       /* FirebaseDatabase database1;
         database1 = FirebaseDatabase.getInstance();
 
         userPostUniqueIdLists = new ArrayList<>();
@@ -377,7 +401,31 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) { }
 
-        });
+        });*/
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    public void logoutClick(MenuItem item) {
+
+        //ERASE ALL THE USER DATA IN THE SHARED PREFERENCES
+        editor.putString("uid","");
+        editor.putString("role","");
+        editor.putString("fullName","");
+        editor.putString("email","");
+        editor.putString("phoneNumber","");
+
+        editor.commit();
+        //FireBasePhoneAuth.signOut();
+        firebaseAuth.signOut();
+        Toasty.success(this,"Log out!",Toasty.LENGTH_SHORT).show();
+        startActivity(new Intent(this, FireBasePhoneAuth.class));
 
     }
 }

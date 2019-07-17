@@ -10,6 +10,7 @@
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:title="logout"
+        android:onClick="logoutClick"
         app:showAsAction="never" />
 
 </menu>

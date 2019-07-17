@@ -8,12 +8,19 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.lalthanpuia.trafficpoliceswipe4.R;
+import com.example.lalthanpuia.trafficpoliceswipe4.entity.NotificationEntity;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
+
 public class SingleUserAdapter extends RecyclerView.Adapter<SingleUserAdapter.MyHolder> {
 
-    public SingleUserAdapter() {
+    ArrayList<NotificationEntity> notificationEntities;
+    public SingleUserAdapter(ArrayList<NotificationEntity> myNoti) {
+
+        notificationEntities = myNoti;
+
     }
 
     @NonNull
@@ -26,12 +33,12 @@ public class SingleUserAdapter extends RecyclerView.Adapter<SingleUserAdapter.My
 
     @Override
     public void onBindViewHolder(@NonNull MyHolder myHolder, int i) {
-
+            myHolder.myBody.setText(notificationEntities.get(i).getMessage());
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return notificationEntities.size();
     }
 
     class MyHolder extends RecyclerView.ViewHolder implements View.OnClickListener{

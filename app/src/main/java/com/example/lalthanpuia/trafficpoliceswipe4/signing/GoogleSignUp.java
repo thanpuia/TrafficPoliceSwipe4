@@ -83,7 +83,11 @@ public class GoogleSignUp extends AppCompatActivity {
 
         //PREPOPULATE IF USER ALREADY EXIST
         showProgressDialog();
+
+
         prepopulateIfUserExist(uid);
+
+
 
     }
 
@@ -148,7 +152,6 @@ public class GoogleSignUp extends AppCompatActivity {
 
     public void prepopulateIfUserExist(final String mUID) {
 
-
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference myRef = database.getReference("user_details/"+mUID);
 
@@ -156,19 +159,34 @@ public class GoogleSignUp extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-               // DataSnapshot messageSnapshot = (DataSnapshot) dataSnapshot.getChildren();
+                Log.i("TAG/SIGN up","datasnap:"+dataSnapshot);
 
-                //String name = (String) dataSnapshot.child(mUID).getValue();
+                Log.i("TAG/SIGN up","valyue:"+dataSnapshot.getValue());
+                String value = String.valueOf(dataSnapshot.getValue());
+                Log.i("TAG/SIGN up","valyue in strg:"+value);
+
+                if(value.matches("null")){
+
+                    Log.i("TAG/SIGN up","IFF");
+
+                    //NEW USER
+                  dismissProgressDialog();
+                }else {
+                    Log.i("TAG/SIGN up","ESLSS");
+
+                    //TODO : RECURRING USER
+                    //DataSnapshot messageSnapshot = (DataSnapshot) dataSnapshot.getChildren();
+                    //String name = (String) dataSnapshot.child(mUID).getValue();
                     //String message = (String) messageSnapshot.child("message").getValue();
-                Log.i("TAG", "datasnapshot+ " +dataSnapshot);
+                    Log.i("TAG", "datasnapshot+ " +dataSnapshot);
 
 
-              //  Log.i("TAG", "name+" +name );
+                    //  Log.i("TAG", "name+" +name );
 
 
-               // if(name == null){
+                    // if(name == null){
                     Log.i("TAG", "if+");
-             //   }else {
+                    //   }else {
                     UserDetails myUserDetails = dataSnapshot.getValue(UserDetails.class);
                     Log.i("TAG", "datasnap:"+myUserDetails.getName());
 
@@ -187,11 +205,14 @@ public class GoogleSignUp extends AppCompatActivity {
 
                     editor.putString("email" , myUserDetails.getEmail());
                     editor.putString("phoneNumber" , myUserDetails.getPhone());
-                 //   Log.i("TAG","Phone:"+phoneNumber);
+                    //   Log.i("TAG","Phone:"+phoneNumber);
 
                     editor.commit();
 
                     startActivity(intent);
+                    finish();
+                }
+
                 }
            // }
 
@@ -229,7 +250,7 @@ public class GoogleSignUp extends AppCompatActivity {
             editor.putString("userUniqueKey" ,Uid );
             editor.commit();
 
-            Log.i("tag",""+citizenName.getText());
+            Log.i("tag",""+tempUserName);
 
             userDetails = new UserDetails();
             userDetails.setName(tempUserName);
@@ -238,7 +259,7 @@ public class GoogleSignUp extends AppCompatActivity {
             userDetails.setPhone(phoneNumber);
             userDetails.setRole("citizen");
 
-            database.child(Uid).setValue(userDetails).addOnCompleteListener(new OnCompleteListener<Void>() {
+            database.child(Uid).setValue(userDetails).addOnCompleteListener (new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     signUpButton.setEnabled(true);
@@ -263,6 +284,7 @@ public class GoogleSignUp extends AppCompatActivity {
             editor.commit();
 
             startActivity(intent);
+            finish();
         }
     }
 }
