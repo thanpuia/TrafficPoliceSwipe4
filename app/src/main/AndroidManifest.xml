@@ -18,7 +18,8 @@
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SingleUserFeedNewActivity"></activity>
+        <activity android:name=".SingleUserFeedNewActivity"
+            android:theme="@style/AppTheme2.NoActionBar"/>
         <activity android:name=".ListOfReportTitlesActivity" />
         <activity
             android:name=".ReportSubmitActivity"

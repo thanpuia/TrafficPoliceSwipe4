@@ -53,7 +53,10 @@ dependencies {
     // location play services
     // dexter runtime permissions
     implementation 'com.karumi:dexter:4.2.0'
+    implementation 'io.nlopez.smartlocation:library:3.3.3'
 
+    //readmore text
+    implementation 'com.borjabravo:readmoretextview:2.1.0'
     //    // For developers using AndroidX in their applications
     //    implementation 'pub.devrel:easypermissions:3.0.0'
     //

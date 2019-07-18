@@ -10,18 +10,18 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.lalthanpuia.trafficpoliceswipe4.adapters.MyAdapter;
+import com.example.lalthanpuia.trafficpoliceswipe4.entity.NotificationEntity;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 import com.srx.widget.PullCallback;
 import com.srx.widget.PullToLoadView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Paginator {
 
@@ -33,6 +33,7 @@ public class Paginator {
     private boolean hasLoadedAll = false;
     private int nextPage;
     int NUM_LOAD_INDEX = 40;
+    NotificationEntity notificationEntity;
 
     FirebaseDatabase database;
     DatabaseReference myRef;
@@ -50,6 +51,8 @@ public class Paginator {
         this.c = c;
         this.pullToLoadView = pullToLoadView;
 
+        notificationEntity = new NotificationEntity();
+
         //RECYCLERVIEW
         RecyclerView rv=pullToLoadView.getRecyclerView();
         rv.setLayoutManager(new LinearLayoutManager(c, LinearLayoutManager.VERTICAL,false));
@@ -59,10 +62,11 @@ public class Paginator {
 //        message_arrayList = new ArrayList<>();
         //adminTemp = new String();
 
-       // adapter=new MyAdapter(c,new ArrayList<String>());
+        adapter=new MyAdapter();
 
 
-        adapter=new MyAdapter(c,new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>(),new String(),new ArrayList<String>());
+      //  adapter=new MyAdapter();
+
         rv.setAdapter(adapter);
 
         database = FirebaseDatabase.getInstance();
@@ -98,7 +102,7 @@ public class Paginator {
             @Override
             public void onRefresh() {
                 Log.i("LOADMORE/1","1");
-                adapter.clear();
+//                adapter.clear();
                 firstPageLoaded = false;
                 adapter.notifyDataSetChanged();
                 hasLoadedAll=false;
@@ -140,6 +144,7 @@ public class Paginator {
 
         isLoading = true;
 
+
         Query ref1;
         if(page == 1) {
             Log.i("LOADMORE/INITIAL","load");
@@ -157,6 +162,9 @@ public class Paginator {
                     return;
                 }
 
+                notificationEntity = dataSnapshot.getValue(NotificationEntity.class);
+
+                /*
                 String adminTemp    = (String) dataSnapshot.child("admin")  .getValue();
                 String dateTemp     = (String) dataSnapshot.child("date")   .getValue();
                 String messageTemp  = (String) dataSnapshot.child("message").getValue();
@@ -168,7 +176,7 @@ public class Paginator {
 
                 String userUniqueKey = (String)dataSnapshot.child("user_id").getValue();
                 String police_incharge = (String) dataSnapshot.child("police_incharge").getValue();
-
+*/
                 lastKey = dataSnapshot.getKey();
 
                 String uniqueKey = lastKey;
@@ -180,7 +188,9 @@ public class Paginator {
 //                message_arrayList.add(messageTemp);
 
                 from = "paginator";
-                adapter.add(adminTemp, dateTemp, messageTemp, downloadURL, latitude, longitude, uniqueKey, userUniqueKey, from, police_incharge);
+              /*adapter.add(adminTemp, dateTemp, messageTemp, downloadURL, latitude, longitude, uniqueKey, userUniqueKey, from, police_incharge);*/
+               adapter = new MyAdapter(notificationEntity);
+                // adapter.add(notificationEntity);
                 adapter.notifyDataSetChanged();
 //                counter++;
                 startAt = (Long) dataSnapshot.child("sortkey").getValue();

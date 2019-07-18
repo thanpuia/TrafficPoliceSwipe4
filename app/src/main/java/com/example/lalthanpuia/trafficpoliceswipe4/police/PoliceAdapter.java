@@ -1,13 +1,6 @@
 package com.example.lalthanpuia.trafficpoliceswipe4.police;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,12 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.lalthanpuia.trafficpoliceswipe4.ItemFiveActivity;
-import com.example.lalthanpuia.trafficpoliceswipe4.MyAdapter;
 import com.example.lalthanpuia.trafficpoliceswipe4.R;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 

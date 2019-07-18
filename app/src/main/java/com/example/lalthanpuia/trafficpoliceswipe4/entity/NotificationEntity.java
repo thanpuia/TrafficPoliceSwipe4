@@ -8,6 +8,7 @@ public class NotificationEntity implements Parcelable {
     String date;
     String downloadURL;
     String message;
+    String title;
     String sender_name;
     String sender_phone;
     String sender_role;
@@ -16,14 +17,16 @@ public class NotificationEntity implements Parcelable {
     String latitude;
     String longitude;
     String police_incharge;
+    String status;
 
     public NotificationEntity() {
     }
 
-    public NotificationEntity(String date, String downloadURL, String message, String sender_name, String sender_phone, String sender_role, long sortkey, String latitude, String longitude, String police_incharge) {
+    public NotificationEntity(String date, String downloadURL, String message, String title, String sender_name, String sender_phone, String sender_role, long sortkey, String latitude, String longitude, String police_incharge, String status) {
         this.date = date;
         this.downloadURL = downloadURL;
         this.message = message;
+        this.title = title;
         this.sender_name = sender_name;
         this.sender_phone = sender_phone;
         this.sender_role = sender_role;
@@ -31,12 +34,14 @@ public class NotificationEntity implements Parcelable {
         this.latitude = latitude;
         this.longitude = longitude;
         this.police_incharge = police_incharge;
+        this.status = status;
     }
 
     protected NotificationEntity(Parcel in) {
         date = in.readString();
         downloadURL = in.readString();
         message = in.readString();
+        title = in.readString();
         sender_name = in.readString();
         sender_phone = in.readString();
         sender_role = in.readString();
@@ -44,6 +49,7 @@ public class NotificationEntity implements Parcelable {
         latitude = in.readString();
         longitude = in.readString();
         police_incharge = in.readString();
+        status = in.readString();
     }
 
     public static final Creator<NotificationEntity> CREATOR = new Creator<NotificationEntity>() {
@@ -80,6 +86,14 @@ public class NotificationEntity implements Parcelable {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getSender_name() {
@@ -138,6 +152,14 @@ public class NotificationEntity implements Parcelable {
         this.police_incharge = police_incharge;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -148,6 +170,7 @@ public class NotificationEntity implements Parcelable {
         dest.writeString(date);
         dest.writeString(downloadURL);
         dest.writeString(message);
+        dest.writeString(title);
         dest.writeString(sender_name);
         dest.writeString(sender_phone);
         dest.writeString(sender_role);
@@ -155,5 +178,6 @@ public class NotificationEntity implements Parcelable {
         dest.writeString(latitude);
         dest.writeString(longitude);
         dest.writeString(police_incharge);
+        dest.writeString(status);
     }
 }

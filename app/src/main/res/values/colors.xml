@@ -21,5 +21,9 @@
     <color name="global_notification">#F9827C</color>
     <color name="rules_and_regulation">#F66868</color>
 
+    <color name="red">#FF0000</color>
+    <color name="green">#09F013</color>
+    <color name="yellow">#FDD835</color>
 
+    <color name="grey_background">#F3F3F3</color>
 </resources>

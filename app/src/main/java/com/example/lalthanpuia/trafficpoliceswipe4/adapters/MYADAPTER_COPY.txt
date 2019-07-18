@@ -1,10 +1,23 @@
-package com.example.lalthanpuia.trafficpoliceswipe4;
-
+package com.example.lalthanpuia.trafficpoliceswipe4.adapters;
+/*
+*
+*
+*
+*
+*
+* THIS IS THE ADAPTER FOR ADMIN VIEW
+*
+*
+*
+*
+*
+*
+*
+* */
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,8 +26,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.example.lalthanpuia.trafficpoliceswipe4.ItemFiveActivity;
+import com.example.lalthanpuia.trafficpoliceswipe4.R;
+import com.example.lalthanpuia.trafficpoliceswipe4.entity.NotificationEntity;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -23,18 +37,10 @@ import java.util.ArrayList;
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
 
     StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+    ArrayList<NotificationEntity> notificationEntities;
 
     Context c;
 
-    ArrayList<String> adminList;
-    ArrayList<String> dateList;
-    ArrayList<String> messageList;
-    ArrayList<String> downloadURLList;
-    ArrayList<String> latitudeList;
-    ArrayList<String> longitudeList;
-    ArrayList<String> uniqueKeyList;
-    ArrayList<String> userUniqueKeyList;
-    ArrayList<String> police_inchargeList;
     String fromWhere;
 
     Bitmap bitmap;
@@ -42,21 +48,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
     /*
     CONSTRUCTOR
     */
-    //public MyAdapter(Context c, ArrayList<Spaceship> spaceship) {
-    public MyAdapter(Context c, ArrayList<String> admin, ArrayList<String> date, ArrayList<String> message, ArrayList<String> downloadURL, ArrayList<String> latitude, ArrayList<String> longitude, ArrayList<String> uniqueKey, ArrayList<String> userUniqueKey, String from, ArrayList<String> police_incharge ) {
-
-        this.c = c;
-        this.adminList = admin;
-        this.dateList = date;
-        this.messageList = message;
-        this.downloadURLList = downloadURL;
-        this.latitudeList = latitude;
-        this.longitudeList = longitude;
-        this.uniqueKeyList = uniqueKey;
-        this.userUniqueKeyList = userUniqueKey;
-        this.fromWhere = from;
-        this.police_inchargeList = police_incharge;
-
+    public MyAdapter() {
     }
 
     //INITIALIE VH
@@ -75,12 +67,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
        // holder.nametxt.setText(spaceships.get(position).toString());
 
         try{
-            holder.adminTV.setText(adminList.get(position).toString());
-            //holder.adminTV.setText("placeHolder");
+            holder.senderNameTV.setText(adminList.get(position).toString());
 
             holder.dateTV.setText(dateList.get(position).toString());
-            //holder.dateTV.setText("placeHolder");
             holder.messageTV.setText(messageList.get(position).toString());
+
         }catch(Exception e){
 
         }
@@ -145,20 +136,20 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
         notifyDataSetChanged();
     }*/
 
-    public void add(String ad, String dat, String mes, String dURL, String lat, String lng, String uniqueKey, String userUniqueKey, String from, String police_incharge) {
-        adminList.add(ad);
-        dateList.add(dat);
-        messageList.add(mes);
+    public void add(NotificationEntity notificationEntity, String uniqueKey, String from) {
+        adminList.add(notificationEntity.getSender_name());
+        dateList.add(notificationEntity.getDate());
+        messageList.add(notificationEntity.getMessage());
 
-        downloadURLList.add(dURL);
-        latitudeList.add(lat);
-        longitudeList.add(lng);
+        downloadURLList.add(notificationEntity.getDownloadURL());
+        latitudeList.add(notificationEntity.getLatitude());
+        longitudeList.add(notificationEntity.getLongitude());
 
         uniqueKeyList.add(uniqueKey);
-        userUniqueKeyList.add(userUniqueKey);
+        //userUniqueKeyList.add(userUniqueKey);
 
         fromWhere = from;
-        police_inchargeList.add(police_incharge);
+        //police_inchargeList.add(police_incharge);
 
         notifyDataSetChanged();
     }
@@ -190,7 +181,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
     class MyHolder extends RecyclerView.ViewHolder implements View.OnClickListener  {
 
       //  TextView nametxt;
-        TextView adminTV;
+        TextView senderNameTV;
         TextView dateTV;
         TextView messageTV;
         ImageView imageView;
@@ -203,7 +194,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
             super(itemView);
 
            // this.nametxt= (TextView) itemView.findViewById(R.id.nameTxt);
-            this.adminTV= (TextView) itemView.findViewById(R.id.adminTV);
+            this.senderNameTV= (TextView) itemView.findViewById(R.id.senderName);
             this.dateTV= (TextView) itemView.findViewById(R.id.dateTV);
             this.messageTV= (TextView) itemView.findViewById(R.id.messageTV);
             this.imageView = itemView.findViewById(R.id.imageView);
@@ -220,7 +211,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
         public void onClick(View view) {
 
             int position = getAdapterPosition();
-            Intent intent = new Intent(view.getContext(),ItemFiveActivity.class);
+            Intent intent = new Intent(view.getContext(), ItemFiveActivity.class);
 
             intent.putExtra("message",messageList.get(position));
             intent.putExtra("downloadUrl",downloadURLList.get(position));

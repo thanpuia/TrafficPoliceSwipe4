@@ -22,7 +22,7 @@ public class FragmentHolderActivity extends AppCompatActivity {
         //ItemTwoFragment itemTwoFragment = null;
         ItemThreeFragment itemThreeFragment = null;
         ItemFourFragment itemFourFragment = null;
-        SingleUserFeed singleUserFeed = null;
+        //SingleUserFeed singleUserFeed = null;
         GlobalNotificationSenderFragment globalNotificationSenderFragment = null;
         GlobalNotificationFragment globalNotificationFragment = null;
 
@@ -41,7 +41,7 @@ public class FragmentHolderActivity extends AppCompatActivity {
                 break;
 
             case "3":
-                              /*  itemThreeFragment = ItemThreeFragment.newInstance();
+            /*  itemThreeFragment = ItemThreeFragment.newInstance();
                                 transaction.replace(R.id.frame_layout,itemThreeFragment);*/
                 Intent intent1 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(intent1, CAMERA_REQUEST);
@@ -51,8 +51,8 @@ public class FragmentHolderActivity extends AppCompatActivity {
              //   itemTwoFragment = ItemTwoFragment.newInstance();
                 // itemFourFragment = ItemFourFragment.newInstance();
                 // transaction.replace(R.id.frame_layout,itemFourFragment);
-                singleUserFeed = new SingleUserFeed();
-                transaction.replace(R.id.frame_layout, singleUserFeed);
+               // singleUserFeed = new SingleUserFeed();
+              //  transaction.replace(R.id.frame_layout, singleUserFeed);
                 break;
 
             case "5":

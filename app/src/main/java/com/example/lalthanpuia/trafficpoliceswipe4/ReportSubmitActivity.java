@@ -69,11 +69,13 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 import es.dmoral.toasty.Toasty;
+import io.nlopez.smartlocation.OnLocationUpdatedListener;
+import io.nlopez.smartlocation.SmartLocation;
 
 import static android.support.constraint.Constraints.TAG;
 import static com.example.lalthanpuia.trafficpoliceswipe4.ItemOneFragment.MY_PERMISSIONS_REQUEST_LOCATION;
 
-public class ReportSubmitActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, ActivityCompat.OnRequestPermissionsResultCallback {
+public class ReportSubmitActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
 
     private static final String TAG = "MyApps-Location2";
 
@@ -107,6 +109,8 @@ public class ReportSubmitActivity extends AppCompatActivity implements GoogleApi
     String shared_phone;
     String shared_Uid;
     String shared_role;
+
+    String lat,lng;
 
     boolean imageSelect = false;
     FrameLayout button;
@@ -220,14 +224,30 @@ public class ReportSubmitActivity extends AppCompatActivity implements GoogleApi
 
         //**GET LOCATION START
 
-        showLastKnownLocation();
+       // showLastKnownLocation();
+        newKey = database.child("notifications").push().getKey();
+
+        SmartLocation.with(this).location()
+                .oneFix()
+                .start(new OnLocationUpdatedListener() {
+
+
+                    @Override
+                    public void onLocationUpdated(Location location) {
+
+                        Log.i("TAG/Smart Location","Location:"+location);
+                        lat = String.valueOf(location.getLatitude());
+                        lng = String.valueOf(location.getLongitude());
+                        database.child("notifications/" + newKey).child("latitude").setValue(String.valueOf(lat));
+                        database.child("notifications/" + newKey).child("longitude").setValue(String.valueOf(lng));
+                    }
+                });
 
         //** GET LOCATION ENDS
 
 
         String currentDateandTime = sdf.format(new Date());
 
-        newKey = database.child("notifications").push().getKey();
 
         String message = String.valueOf(et_message.getText());
 
@@ -239,10 +259,16 @@ public class ReportSubmitActivity extends AppCompatActivity implements GoogleApi
             database.child("notifications/" + newKey).child("message").setValue(message);
 
             timestamp = System.currentTimeMillis() / -1000;
+
             database.child("notifications/" + newKey).child("sortkey").setValue(timestamp);
             database.child("notifications/" + newKey).child("sender_name").setValue(shared_fullName);
             database.child("notifications/" + newKey).child("sender_phone").setValue(shared_phone);
             database.child("notifications/" + newKey).child("sender_role").setValue(shared_role);
+            database.child("notifications/" + newKey).child("status").setValue(shared_role);
+
+
+            database.child("notifications/" + newKey).child("title").setValue(reportTitleEdittext.getText().toString());
+
 
             //WITH PIC OR WITHOUT PIC CHECKER
             //Pic Embedded
@@ -266,19 +292,20 @@ public class ReportSubmitActivity extends AppCompatActivity implements GoogleApi
                 // for ActivityCompat#requestPermissions for more details.
                 return;
             }
-            Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+           // Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
-            database.child("notifications/" + newKey).child("latitude").setValue(String.valueOf(lastLocation.getLatitude()));
-            database.child("notifications/" + newKey).child("longitude").setValue(String.valueOf(lastLocation.getLongitude()));
-            database.child("notifications/" + newKey).child("altitude").setValue(String.valueOf(lastLocation.getAltitude()));
-            database.child("notifications/" + newKey).child("accuracy").setValue(String.valueOf(lastLocation.getAccuracy())).addOnSuccessListener(new OnSuccessListener<Void>() {
+            // database.child("notifications/" + newKey).child("latitude").setValue(String.valueOf(lat));
+          //  database.child("notifications/" + newKey).child("longitude").setValue(String.valueOf(lng));
+          /*  database.child("notifications/" + newKey).child("altitude").setValue(String.valueOf(lastLocation.getAltitude()));
+            database.child("notifications/" + newKey).child("accuracy").setValue(String.valueOf(lastLocation.getAccuracy()))*/
+            database.child("notifications/" + newKey).child("police_incharge").setValue("").addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
                     et_message.setText("");
+                    reportTitleEdittext.setText("");
                     Toasty.success(getApplicationContext(), "Report sent success!", Toasty.LENGTH_SHORT).show();
                 }
             });
-            database.child("notifications/" + newKey).child("police_incharge").setValue("");
             //  database.child("notifications/" + newKey).child("username").setValue(shared_fullName);
             //database.child("notifications/" + newKey).child("user_phone").setValue(shared_phone);
 
@@ -382,9 +409,9 @@ public class ReportSubmitActivity extends AppCompatActivity implements GoogleApi
                 // todo: goto back activity from here
 
                 Intent intent = new Intent(ReportSubmitActivity.this, MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+             //   intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-                finish();
+                //finish();
                 return true;
 
             case R.id.profileEdit:
@@ -418,10 +445,13 @@ public class ReportSubmitActivity extends AppCompatActivity implements GoogleApi
 
     public void showLastKnownLocation() {
         if (mCurrentLocation != null) {
+            Log.i("TAG/report submit",mCurrentLocation.getLatitude()+"location");
             Toast.makeText(getApplicationContext(), "Lat: " + mCurrentLocation.getLatitude()
                     + ", Lng: " + mCurrentLocation.getLongitude(), Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(getApplicationContext(), "Last known location is not available!", Toast.LENGTH_SHORT).show();
+            Log.i("TAG/report submit","not available!");
+
         }
     }
 
@@ -457,6 +487,7 @@ public class ReportSubmitActivity extends AppCompatActivity implements GoogleApi
     //API INIT FOR THE LIBRARY
 
     private void init() {
+        Log.i("TAG/report submit/init","here");
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         mSettingsClient = LocationServices.getSettingsClient(this);
 
@@ -466,6 +497,8 @@ public class ReportSubmitActivity extends AppCompatActivity implements GoogleApi
                 super.onLocationResult(locationResult);
                 // location is received
                 mCurrentLocation = locationResult.getLastLocation();
+                Log.i("TAG/report submit/init","here:"+mCurrentLocation);
+
                 mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
 
                // updateLocationUI();

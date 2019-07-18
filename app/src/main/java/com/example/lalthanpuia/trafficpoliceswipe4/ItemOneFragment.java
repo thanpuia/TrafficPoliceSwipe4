@@ -1,5 +1,23 @@
 package com.example.lalthanpuia.trafficpoliceswipe4;
 
+/*
+*
+*
+*
+*
+*
+* //TODO: THIS IS THE ADMIN VIEW
+*
+*
+*
+*
+*
+* */
+
+
+
+
+
 import android.Manifest;
 import android.Manifest.permission;
 import android.app.AlertDialog;

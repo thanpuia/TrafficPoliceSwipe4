@@ -24,7 +24,7 @@ public class ListOfReportTitlesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_of_report_titles);
 
-        final String[] listOfTitles= {"sadf","asdf","eded"};
+        final String[] listOfTitles= {"No parking","Minor Accident","Motor Chhia"};
         listView = findViewById(R.id.listViewRecyclerView);
 
      //   listView.setLayoutManager(new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL, false));

@@ -1,13 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="18dp"
+    android:layout_marginBottom="11dp"
+    android:orientation="vertical"
+    android:background="#fff">
 
     <TextView
-
-        android:id="@+id/myBody"
+        android:id="@+id/titleTextView"
+        android:text="Title"
+        android:textStyle="bold"
+        android:layout_marginBottom="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+    <com.borjabravo.readmoretextview.ReadMoreTextView
+        android:id="@+id/myBody"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:trimLength="90"
+        android:layout_marginBottom="5dp"
+        android:text="body"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/dateTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/date_submit"
+            android:text=" date"
+            android:gravity="center"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/statusTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Status"
+                />
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/statusImageView"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:background="#FF0000"
+                android:layout_gravity="center"
+                app:civ_border_width="2dp"
+                android:layout_marginLeft="5dp"
+           />
+        </LinearLayout>
+
+    </FrameLayout>
+
 
 </LinearLayout>
