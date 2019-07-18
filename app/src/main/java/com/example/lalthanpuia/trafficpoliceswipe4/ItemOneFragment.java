@@ -21,27 +21,38 @@ package com.example.lalthanpuia.trafficpoliceswipe4;
 import android.Manifest;
 import android.Manifest.permission;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.lalthanpuia.trafficpoliceswipe4.entity.NotificationEntity;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.srx.widget.PullToLoadView;
 
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static android.support.constraint.Constraints.TAG;
 
@@ -54,6 +65,18 @@ public class ItemOneFragment extends Fragment {
     FirebaseDatabase database;
     DatabaseReference myRef;
     public static LocationManager locationManager;
+
+    List<String> postId;
+    SharedPreferences sharedPreferences;
+
+    String shared_uid;
+    NotificationEntity notificationEntity;
+    ArrayList<NotificationEntity> arrayLists;
+    RecyclerView recyclerView;
+    ProgressDialog progressDialog;
+
+    int i;
+    Toolbar toolbar;
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
@@ -75,7 +98,32 @@ public class ItemOneFragment extends Fragment {
 
         PullToLoadView pullToLoadView = view.findViewById(R.id.pullToLoadView);
 
-        new Paginator(getContext(),pullToLoadView).initializePaginator();
+        toolbar = (Toolbar) container.findViewById(R.id.tool_bar_singleuserfeed);
+        toolbar.setNavigationIcon(R.drawable.back_arrow);
+
+        toolbar.setTitleTextColor(Color.rgb(205, 163, 128));
+//        setSupportActionBar(toolbar);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setDisplayShowHomeEnabled(true);
+//        getSupportActionBar().setTitle("List of Report");
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        shared_uid = sharedPreferences.getString("uid","");
+
+        notificationEntity = new NotificationEntity();
+        arrayLists = new ArrayList<>();
+        //postId = new PostIds();
+
+        recyclerView = view.findViewById(R.id.recyclerViewSingleUserFeed);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
+
+        database = FirebaseDatabase.getInstance();
+        myRef = database.getReference("user_details/"+shared_uid+"/post_id/");
+
+        //  new Paginator(getContext(),pullToLoadView).initializePaginator();
+
+
+
+
         checkLocationPermission();
         return view;
     }
