@@ -10,11 +10,6 @@
     android:padding="40dp">
 
 
-
-
-
-
-
                 <EditText
                     android:id="@+id/citizenEmail"
                     android:layout_width="match_parent"

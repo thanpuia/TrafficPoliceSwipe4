@@ -73,7 +73,6 @@ import io.nlopez.smartlocation.OnLocationUpdatedListener;
 import io.nlopez.smartlocation.SmartLocation;
 
 import static android.support.constraint.Constraints.TAG;
-import static com.example.lalthanpuia.trafficpoliceswipe4.ItemOneFragment.MY_PERMISSIONS_REQUEST_LOCATION;
 
 public class ReportSubmitActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
 

@@ -91,7 +91,6 @@ public class SingleUserFeedNewActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-
                     Map<String, String> td = (HashMap<String,String>) dataSnapshot.getValue();
 
                     try{
@@ -128,7 +127,6 @@ public class SingleUserFeedNewActivity extends AppCompatActivity {
 
                         }
                     }catch (Exception e){dismissProgressDialog();}
-
                 }
 
                 @Override
@@ -140,11 +138,9 @@ public class SingleUserFeedNewActivity extends AppCompatActivity {
         }catch (Exception e){
             dismissProgressDialog();
         }
-
     }
 
     private void downloadSingleUserPost(final List<String> postId) {
-
 
         Log.i("TAG/SingleUserFeed","single:"+postId.size());
         final Gson gson = new Gson();
@@ -161,7 +157,6 @@ public class SingleUserFeedNewActivity extends AppCompatActivity {
                         Log.i("TAG","asf:"+dataSnapshot);
                         notificationEntity = dataSnapshot.getValue(NotificationEntity.class);
                         Log.i("TAG","not:"+notificationEntity.getSortkey());
-
                         arrayLists.add(notificationEntity);
 
                         if(i==postId.size()){
@@ -183,10 +178,7 @@ public class SingleUserFeedNewActivity extends AppCompatActivity {
 
                 @Override public void onCancelled(@NonNull DatabaseError databaseError) { }
             });
-
         }
-
-
     }
 
     private void testFunction() {

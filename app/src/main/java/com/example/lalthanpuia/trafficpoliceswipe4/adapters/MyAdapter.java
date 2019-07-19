@@ -1,4 +1,5 @@
 package com.example.lalthanpuia.trafficpoliceswipe4.adapters;
+
 /*
 *
 *
@@ -35,6 +36,7 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
+
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
 
     StorageReference storageReference = FirebaseStorage.getInstance().getReference();
@@ -51,11 +53,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
     */
 
     public MyAdapter() {
+
     }
 
-    public MyAdapter(NotificationEntity mNotificationEntity) {
+    public MyAdapter(ArrayList<NotificationEntity> myNoti) {
 
-        notificationEntities.add(mNotificationEntity);
+        notificationEntities = myNoti;
 
     }
 
@@ -229,9 +232,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
             this.cardView = itemView.findViewById(R.id.cardView);
             this.police_incharge = itemView.findViewById(R.id.police_incharge);
 
-            if(fromWhere.equals("paginator")){
-                itemView.setOnClickListener(this);
-            }
+         //   if(fromWhere.equals("paginator")){
+        //        itemView.setOnClickListener(this);
+         //   }
         }
 
         @Override

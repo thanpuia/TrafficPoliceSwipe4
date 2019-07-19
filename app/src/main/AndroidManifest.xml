@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.lalthanpuia.trafficpoliceswipe4">
+
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
-         location permissions for the 'MyLocation' functionality.
-    -->
+         location permissions for the 'MyLocation' functionality.-->
+
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -18,14 +19,15 @@
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SingleUserFeedNewActivity"
-            android:theme="@style/AppTheme2.NoActionBar"/>
+        <activity android:name=".AdminFeedActivity"></activity>
+        <activity
+            android:name=".SingleUserFeedNewActivity"
+            android:theme="@style/AppTheme2.NoActionBar" />
         <activity android:name=".ListOfReportTitlesActivity" />
         <activity
             android:name=".ReportSubmitActivity"
             android:theme="@style/AppTheme2.NoActionBar" />
         <activity android:name=".police.PoliceIncharge" />
-        <activity android:name=".FragmentHolderActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -53,9 +55,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".ItemFiveActivity" />
-        <activity android:name=".MainActivity"
-            android:theme="@style/AppTheme2.NoActionBar"/>
-        <activity android:name=".signing.AfterSignIn" />
+        <activity
+            android:name=".MainActivity"
+            android:theme="@style/AppTheme2.NoActionBar" />
         <activity android:name=".signing.GoogleSignUp" />
         <activity
             android:name=".signing.GoogleSignIn"

@@ -1,66 +1,39 @@
 package com.example.lalthanpuia.trafficpoliceswipe4;
 
-/*
-*
-*
-*
-*
-*
-* //TODO: THIS IS THE ADMIN VIEW
-*
-*
-*
-*
-*
-* */
-
-
-
-
-
 import android.Manifest;
-import android.Manifest.permission;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.Build;
-import android.os.Bundle;
-
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
+import com.example.lalthanpuia.trafficpoliceswipe4.adapters.MyAdapter;
 import com.example.lalthanpuia.trafficpoliceswipe4.entity.NotificationEntity;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.srx.widget.PullToLoadView;
-
+import com.google.firebase.database.ValueEventListener;
+import com.yalantis.phoenix.PullToRefreshView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static android.support.constraint.Constraints.TAG;
 
-/**
- * A simple {@link Fragment} subclass.
- */
-
-public class ItemOneFragment extends Fragment {
+public class AdminFeedActivity extends AppCompatActivity {
 
     FirebaseDatabase database;
     DatabaseReference myRef;
@@ -71,86 +44,94 @@ public class ItemOneFragment extends Fragment {
 
     String shared_uid;
     NotificationEntity notificationEntity;
-    ArrayList<NotificationEntity> arrayLists;
+    ArrayList<NotificationEntity> notificationEntities;
     RecyclerView recyclerView;
-    ProgressDialog progressDialog;
+    MyAdapter myAdapter;
 
-    int i;
-    Toolbar toolbar;
+    PullToRefreshView pullToRefreshView;
 
-    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
-
-    public static ItemOneFragment newInstance() {
-        ItemOneFragment fragment = new ItemOneFragment();
-        return fragment;
-    }
-
-    public ItemOneFragment() {
-        // Required empty public constructor
-    }
-
+    private final int MY_PERMISSIONS_REQUEST_LOCATION = 1;
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view =inflater.inflate(R.layout.fragment_item_one, container, false);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_admin_feed);
 
-        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
-        PullToLoadView pullToLoadView = view.findViewById(R.id.pullToLoadView);
-
-        toolbar = (Toolbar) container.findViewById(R.id.tool_bar_singleuserfeed);
-        toolbar.setNavigationIcon(R.drawable.back_arrow);
-
-        toolbar.setTitleTextColor(Color.rgb(205, 163, 128));
-//        setSupportActionBar(toolbar);
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        getSupportActionBar().setDisplayShowHomeEnabled(true);
-//        getSupportActionBar().setTitle("List of Report");
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         shared_uid = sharedPreferences.getString("uid","");
 
+
         notificationEntity = new NotificationEntity();
-        arrayLists = new ArrayList<>();
+        notificationEntities = new ArrayList<>();
         //postId = new PostIds();
 
-        recyclerView = view.findViewById(R.id.recyclerViewSingleUserFeed);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
+        recyclerView = findViewById(R.id.recyclerViewAdminView);
+        pullToRefreshView = findViewById(R.id.pullToRefreshAdminView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false));
 
         database = FirebaseDatabase.getInstance();
-        myRef = database.getReference("user_details/"+shared_uid+"/post_id/");
+        myRef = database.getReference("notifications/");
 
-        //  new Paginator(getContext(),pullToLoadView).initializePaginator();
+        // TODO: DOWNLOAD ALL THE NOTIFICATION ONE BY ONE
+        myRef.orderByChild("sortkey").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Log.i("TAG/admin view","snap:"+dataSnapshot);
+                notificationEntity = dataSnapshot.getValue(NotificationEntity.class);
 
+                notificationEntities.add(notificationEntity);
+                String name = (String) dataSnapshot.child("sender_name").getValue();
+                Log.i("TAG/adminfeed","sender_name:"+name);
+                //myAdapter = new MyAdapter(notificationEntity);
+                //recyclerView.setAdapter(myAdapter);
+                //notifyAll();
+            }
+            @Override public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }
+            @Override public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) { }
+            @Override public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }
+            @Override public void onCancelled(@NonNull DatabaseError databaseError) { }
+        });
 
+        //TODO: THIS IS CALLED AFTER ALL THE DATA IS FINISHED FROM THE CHILD EVENT LISTENER!
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
+                myAdapter = new MyAdapter(notificationEntities);
+                recyclerView.setAdapter(myAdapter);
+                Log.i("TAG/admin feed","finsiher!");
+            }
 
-        checkLocationPermission();
-        return view;
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
 
     // PERMISSION FOR LOCATION STARTS HEREE
     public boolean checkLocationPermission() {
-        if (ContextCompat.checkSelfPermission(getContext(),
-                permission.ACCESS_FINE_LOCATION)
+        if (ContextCompat.checkSelfPermission(getApplicationContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
 
             // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
-                    permission.ACCESS_FINE_LOCATION)) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
 
                 // Show an explanation to the user *asynchronously* -- don't block
                 // this thread waiting for the user's response! After the user
                 // sees the explanation, try again to request the permission.
-                new AlertDialog.Builder(getContext())
+                new AlertDialog.Builder(getApplicationContext())
                         .setTitle("Permission")
                         .setMessage("permit em?")
                         .setPositiveButton("ok", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 //Prompt the user once explanation has been shown
-                                ActivityCompat.requestPermissions(getActivity(),
-                                        new String[]{permission.ACCESS_FINE_LOCATION},
+                                ActivityCompat.requestPermissions(AdminFeedActivity.this,
+                                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                                         MY_PERMISSIONS_REQUEST_LOCATION);
                             }
                         })
@@ -160,8 +141,8 @@ public class ItemOneFragment extends Fragment {
 
             } else {
                 // No explanation needed, we can request the permission.
-                ActivityCompat.requestPermissions(getActivity(),
-                        new String[]{permission.ACCESS_FINE_LOCATION},
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         MY_PERMISSIONS_REQUEST_LOCATION);
             }
             return false;
@@ -179,7 +160,7 @@ public class ItemOneFragment extends Fragment {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // permission was granted, yay! Do the
                     // location-related task you need to do.
-                    if (ContextCompat.checkSelfPermission(getContext(), permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                         //Request location updates:
                         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 400, 1, (LocationListener) this);
                         //locationManager.requestLocationUpdates(this.LOCATION_SERVICE, 400, 1, (LocationListener) MainActivity.this);
@@ -203,8 +184,4 @@ public class ItemOneFragment extends Fragment {
     }
     //PERMISSION FOR LOCATION ENDS HERE
 
-    //PERMISSION FOR STORAGE STARTS HERE
-
-
-    //PERMISSION FOR STORAGE ENDS HERE
 }

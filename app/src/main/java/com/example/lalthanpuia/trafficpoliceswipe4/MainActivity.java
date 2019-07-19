@@ -48,7 +48,6 @@ import java.util.ArrayList;
 import es.dmoral.toasty.Toasty;
 
 import static android.support.constraint.Constraints.TAG;
-import static com.example.lalthanpuia.trafficpoliceswipe4.ItemOneFragment.MY_PERMISSIONS_REQUEST_LOCATION;
 
 //import com.google.android.gms.location.LocationManager;
 
@@ -67,9 +66,8 @@ public class MainActivity extends AppCompatActivity {
     public static ArrayList<String> policeName, policeNameKey;
     Intent intent;
     Button adminfeedButton, reportButton, adminGlobalSenderButton, globalNotifyButton;
-
     BottomNavigationView bottomNavigationView;
-    BottomNavigationViewHelper bottomNavigationViewHelper;
+  //  BottomNavigationViewHelper bottomNavigationViewHelper;
     public static LocationListener locationListener;
 
     private static final int CAMERA_REQUEST = 123;
@@ -82,6 +80,9 @@ public class MainActivity extends AppCompatActivity {
     FrameLayout singleUserFeedFrame, globalNotifyFrame;
     FirebaseAuth firebaseAuth;
     TextView username, userphone;
+
+
+    private final int MY_PERMISSIONS_REQUEST_LOCATION = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -238,7 +239,7 @@ public class MainActivity extends AppCompatActivity {
         tempTtransaction.replace(R.id.frame_layout, ItemOneFragment.newInstance());
         tempTtransaction.commit();*/
 
-        intent = new Intent(this, FragmentHolderActivity.class);
+      //  intent = new Intent(this, FragmentHolderActivity.class);
 
         username.setText(sharedPreferences.getString("fullName",""));
         userphone.setText(sharedPreferences.getString("phoneNumber",""));
@@ -249,8 +250,14 @@ public class MainActivity extends AppCompatActivity {
     }*/
 
     public void oneclick(View view) {
-        intent.putExtra("click","1");
+
+        //TODO: ADMIN VIEW
+
+        Intent intent = new Intent(this,AdminFeedActivity.class);
         startActivity(intent);
+
+       /* intent.putExtra("click","1");
+        startActivity(intent);*/
     }
     public void twoclick(View view) {
 
