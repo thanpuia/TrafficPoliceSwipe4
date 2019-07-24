@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="list_of_report_titles">
 
+    <string-array name="list_of_report_titles">
         <item>one</item>
         <item>tqw</item>
         <item>thre</item>

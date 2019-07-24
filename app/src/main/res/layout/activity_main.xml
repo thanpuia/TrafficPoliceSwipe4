@@ -71,13 +71,13 @@
                 android:layout_width="150dp"
                 android:layout_height="100dp"
                 android:onClick="oneclick"
-                android:backgroundTint="@color/colorAccent"
+                android:backgroundTint="@color/color_accent"
                 android:text="Admin feed"
                 />
 
             <Button
                 android:id="@+id/adminGlobalSenderButton"
-                android:backgroundTint="@color/colorAccent"
+                android:backgroundTint="@color/color_accent"
                 android:layout_width="150dp"
                 android:layout_height="100dp"
                 android:onClick="sevenclick"

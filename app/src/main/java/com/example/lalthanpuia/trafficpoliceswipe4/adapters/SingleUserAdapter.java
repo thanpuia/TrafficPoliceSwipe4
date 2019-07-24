@@ -45,12 +45,12 @@ public class SingleUserAdapter extends RecyclerView.Adapter<SingleUserAdapter.My
             myHolder.date.setText(notificationEntities.get(i).getDate());
             if(notificationEntities.get(i).getStatus().equals("")){
                 //BLANK
-                myHolder.status.setBackgroundColor(R.color.red);
+                myHolder.status.setBackgroundColor(R.color.red_value);
             }else if(notificationEntities.get(i).getStatus().equals("resolved")){
-                myHolder.status.setBackgroundColor(R.color.green);
+                myHolder.status.setBackgroundColor(R.color.green_value);
 
             }else if(notificationEntities.get(i).getStatus().equals("pending")){
-                myHolder.status.setBackgroundColor(R.color.yellow);
+                myHolder.status.setBackgroundColor(R.color.yellow_value);
 
             }
         }catch (Exception e){}
@@ -74,8 +74,6 @@ public class SingleUserAdapter extends RecyclerView.Adapter<SingleUserAdapter.My
             title = itemView.findViewById(R.id.titleTextView);
             date = itemView.findViewById(R.id.dateTextView);
             status = itemView.findViewById(R.id.statusImageView);
-
-
         }
 
         @Override

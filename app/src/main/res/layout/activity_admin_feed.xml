@@ -6,10 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".AdminFeedActivity">
 
-    <com.yalantis.phoenix.PullToRefreshView
-        android:id="@+id/pullToRefreshAdminView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -23,6 +19,5 @@
         </LinearLayout>
 
 
-    </com.yalantis.phoenix.PullToRefreshView>
 
 </LinearLayout>

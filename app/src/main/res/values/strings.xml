@@ -2,20 +2,20 @@
     <string name="app_name">TrafficPoliceSwipe4</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="message">Message</string>
-    <string name="camera">Camera</string>
-    <string name="home">Home</string>
-    <string name="upload">Upload</string>
-    <string name="report">Report</string>
-    <string name="History">History</string>
-    <string name="global">Global Notification</string>
-    <string name="checkreg">Check Registration</string>
-    <string name="rule">Rules</string>
+    <string name="message_value">Message</string>
+    <string name="camera_value">Camera</string>
+    <string name="home_value">Home</string>
+    <string name="upload_value">Upload</string>
+    <string name="report_value">Report</string>
+    <string name="history_value">History</string>
+    <string name="global_value">Global Notification</string>
+    <string name="checkreg_value">Check Registration</string>
+    <string name="rule_value">Rules</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <string name="login">Login</string>
-    <string name="trafficTv">Mizoram Traffic Police</string>
+    <string name="login_value">Login</string>
+    <string name="traffic_tv">Mizoram Traffic Police</string>
 
     <string name="reg">Sign Up</string>
     <string name="mandate">*All fields are Mandatory</string>

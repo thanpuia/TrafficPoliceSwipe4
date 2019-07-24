@@ -16,7 +16,6 @@ import android.location.LocationManager;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
@@ -66,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
     public static ArrayList<String> policeName, policeNameKey;
     Intent intent;
     Button adminfeedButton, reportButton, adminGlobalSenderButton, globalNotifyButton;
-    BottomNavigationView bottomNavigationView;
   //  BottomNavigationViewHelper bottomNavigationViewHelper;
     public static LocationListener locationListener;
 

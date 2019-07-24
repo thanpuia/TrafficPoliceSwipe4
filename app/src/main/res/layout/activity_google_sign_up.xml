@@ -44,7 +44,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:text="Submit"
-                    android:textColor="@color/buttonTextcolor"
+                    android:textColor="@color/button_textcolor"
                     android:backgroundTint="#0C99DA"
                     android:onClick="GoogleSignUpClick"/>
 

@@ -3,23 +3,23 @@
     <item
         android:id="@+id/action_item1"
         android:icon="@drawable/ic_edit_black_24dp"
-        android:title="@string/report" />
+        android:title="@string/report_value" />
     <item
         android:id="@+id/action_item2"
         android:icon="@drawable/ic_history_black_24dp"
-        android:title="@string/History"/>
+        android:title="@string/history_value"/>
     <item
         android:id="@+id/action_item3"
         android:icon="@drawable/ic_notifications_black_24dp"
-        android:title="@string/global"/>
+        android:title="@string/global_value"/>
     <item
         android:id="@+id/action_item4"
         android:icon="@drawable/ic_drive_eta_black_24dp"
-        android:title="@string/checkreg"
+        android:title="@string/checkreg_value"
         />
     <item
         android:id="@+id/action_item5"
         android:icon="@drawable/ic_do_not_disturb_black_24dp"
-        android:title="@string/rule"
+        android:title="@string/rule_value"
         />
 </menu>
