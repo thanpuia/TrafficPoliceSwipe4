@@ -1,8 +1,10 @@
 package com.example.lalthanpuia.trafficpoliceswipe4;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -47,6 +49,8 @@ public class ItemFiveActivity extends AppCompatActivity {
 
     UserDetails userDetails1;
 
+    SharedPreferences sharedPreferences;
+
     String message;
     String downloadurl;
     String latitude;
@@ -58,6 +62,7 @@ public class ItemFiveActivity extends AppCompatActivity {
 
     ArrayList<String> policeNameKey;
     String policeNameKeyStr;
+    String notification_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +80,10 @@ public class ItemFiveActivity extends AppCompatActivity {
         userUniqueKey = intent.getStringExtra("userUniqueKey");
         uniqueKey = intent.getStringExtra("uniqueKey");
 
+        notification_id = intent.getStringExtra("notification_id");
         Log.v("tag",""+userUniqueKey);
+
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
        messagetv = findViewById(R.id.messageTV);
        ivImage = findViewById(R.id.imageView);
@@ -103,19 +111,19 @@ public class ItemFiveActivity extends AppCompatActivity {
            ivImage.setMaxWidth(250);
            ivImage.setMaxHeight(250);
            FirebaseStorage storage = FirebaseStorage.getInstance();
-           StorageReference storageRef = storage.getReferenceFromUrl("gs://traffficpoliceswipe4.appspot.com").child(downloadurl);
+        //   StorageReference storageRef = storage.getReferenceFromUrl("gs://traffficpoliceswipe4.appspot.com").child(downloadurl);
 
            final long ONE_MEGABYTE = 1024 * 1024;
 
            //download file as a byte array
-           storageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+          /* storageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
                @Override
                public void onSuccess(byte[] bytes) {
                    Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                    ivImage.setImageBitmap(bitmap);
                    //showToast("Download successful!");
                }
-           });
+           });*/
        }
 
         //GETTING THE POLICE NAMES FOR THE HINT
@@ -210,6 +218,7 @@ public class ItemFiveActivity extends AppCompatActivity {
 
     private void policeAssignChecking() {
       //  databasePoliceAssign = FirebaseDatabase.getInstance();
+/*
 
         databasePoliceAssign = FirebaseDatabase.getInstance();
         myRef_PoliceAssign = databasePoliceAssign.getReference("notifications/"+uniqueKey);
@@ -235,25 +244,32 @@ public class ItemFiveActivity extends AppCompatActivity {
 
             }
         });
+*/
 
     }
+
+
+
 
     public void ActionUnderTaking(View view) {
         resolvedButton.setEnabled(true);
         DatabaseReference mRef;
 
-        FirebaseDatabase firebaseDatabase;
-        mRef = FirebaseDatabase.getInstance().getReference();
-        firebaseDatabase = FirebaseDatabase.getInstance();
+        String uid = sharedPreferences.getString("uid","");
+        DatabaseReference firebaseDatabase = FirebaseDatabase.getInstance().getReference("user_details/"+uid+"/post_assigned");
 
+        String key = firebaseDatabase.push().getKey();
+
+        firebaseDatabase = FirebaseDatabase.getInstance().getReference("user_details/"+uid+"/post_assigned/"+key);
         //SEND THIS POST IN THE POLICE USER_DETAILS
         if(selectedPoliceName.equals("")){
             Log.v("TAG","Select the police officer");
         }else{
             Log.v("TAG","police assigned successfully");
-            mRef.child("notifications/" + uniqueKey ).child("police_incharge").setValue(selectedPoliceName);
-            updatePoliceUser(selectedPoliceName,policeNameKeyStr, uniqueKey);
 
+            firebaseDatabase.setValue(notification_id);
+            //mRef.child("notifications/" + uniqueKey ).child("police_incharge").setValue(selectedPoliceName);
+            //updatePoliceUser(selectedPoliceName,policeNameKeyStr, uniqueKey);
 
         }
 

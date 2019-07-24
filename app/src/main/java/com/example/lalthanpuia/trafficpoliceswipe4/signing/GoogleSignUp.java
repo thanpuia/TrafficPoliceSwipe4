@@ -160,7 +160,6 @@ public class GoogleSignUp extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 Log.i("TAG/SIGN up","datasnap:"+dataSnapshot);
-
                 Log.i("TAG/SIGN up","valyue:"+dataSnapshot.getValue());
                 String value = String.valueOf(dataSnapshot.getValue());
                 Log.i("TAG/SIGN up","valyue in strg:"+value);

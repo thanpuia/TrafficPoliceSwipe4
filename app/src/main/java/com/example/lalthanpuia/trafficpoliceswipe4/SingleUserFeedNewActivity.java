@@ -115,13 +115,6 @@ public class SingleUserFeedNewActivity extends AppCompatActivity {
                                 postId.add(s);
                                 Log.i("TAG","String exceptiopn"); }
 
-                        /*EXAMPLE:
-                        String text = "iMac";
-                        String withoutFirstCharacter = text.substring(1); // index starts at zero
-                        String withoutLastCharacter = text.substring(0, text.length() - 1);
-
-                        st = st.replaceAll("\\s+","")*/
-
                             //Log.i("TAG",";;;"+postId.get(1));
                             downloadSingleUserPost(postId);
 

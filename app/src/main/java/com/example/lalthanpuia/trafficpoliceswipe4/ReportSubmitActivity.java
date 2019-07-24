@@ -178,14 +178,8 @@ public class ReportSubmitActivity extends AppCompatActivity implements ActivityC
 
         Log.d("TAG", "ItemTwoFragment/mAuth:" + sharedPreferences.getString("fullName", null));
 
-
-
-
         // CALL THE INIT
         init();
-
-
-
 
         et_message = findViewById(R.id.et_message);
         button = findViewById(R.id.button);
@@ -263,8 +257,7 @@ public class ReportSubmitActivity extends AppCompatActivity implements ActivityC
             database.child("notifications/" + newKey).child("sender_name").setValue(shared_fullName);
             database.child("notifications/" + newKey).child("sender_phone").setValue(shared_phone);
             database.child("notifications/" + newKey).child("sender_role").setValue(shared_role);
-            database.child("notifications/" + newKey).child("status").setValue(shared_role);
-
+            database.child("notifications/" + newKey).child("status").setValue("unresolve");
 
             database.child("notifications/" + newKey).child("title").setValue(reportTitleEdittext.getText().toString());
 

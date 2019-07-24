@@ -78,6 +78,11 @@
 
         </FrameLayout>
 
+        <Button
+            android:id="@+id/changeStatusButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Change status"/>
         <TextView
             android:id="@+id/police_incharge"
             android:layout_width="wrap_content"

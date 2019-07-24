@@ -30,6 +30,8 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.example.lalthanpuia.trafficpoliceswipe4.entity.NotificationEntity;
+import com.example.lalthanpuia.trafficpoliceswipe4.police.PoliceIncharge;
 import com.example.lalthanpuia.trafficpoliceswipe4.signing.FireBasePhoneAuth;
 import com.example.lalthanpuia.trafficpoliceswipe4.signing.GoogleSignIn;
 import com.google.firebase.auth.FirebaseAuth;
@@ -43,6 +45,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import es.dmoral.toasty.Toasty;
 
@@ -64,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
     DatabaseReference myRef_police;
     public static ArrayList<String> policeName, policeNameKey;
     Intent intent;
-    Button adminfeedButton, reportButton, adminGlobalSenderButton, globalNotifyButton;
+    Button adminfeedButton, reportButton, adminGlobalSenderButton, globalNotifyButton, policeReportButton;
   //  BottomNavigationViewHelper bottomNavigationViewHelper;
     public static LocationListener locationListener;
 
@@ -79,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
     TextView username, userphone;
 
+    NotificationEntity noty;
 
     private final int MY_PERMISSIONS_REQUEST_LOCATION = 1;
 
@@ -97,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
 
         username = findViewById(R.id.userNameMainMenu);
         userphone = findViewById(R.id.userphoneMainMenu);
+        policeReportButton = findViewById(R.id.policeReportList);
 
         firebaseAuth = FirebaseAuth.getInstance();
         storage = FirebaseStorage.getInstance();
@@ -140,8 +146,15 @@ public class MainActivity extends AppCompatActivity {
         //HIDE THE BUTTON IF THE USER IS ADMIN
         if(role.equals("admin")){
            // singleUserFeedFrame.setVisibility(View.GONE);
+            policeReportButton.setVisibility(View.GONE);
         }
         else if(role.equals("citizen")){
+            policeReportButton.setVisibility(View.GONE);
+            adminfeedButton.setVisibility(View.GONE);
+            adminGlobalSenderButton.setVisibility(View.GONE);
+
+        }else if(role.equals("verifier")){
+
             adminfeedButton.setVisibility(View.GONE);
             adminGlobalSenderButton.setVisibility(View.GONE);
         }
@@ -212,20 +225,30 @@ public class MainActivity extends AppCompatActivity {
         //GETTING THE POLICE NAMES FOR THE HINT
         database_policeIncharge = FirebaseDatabase.getInstance();
 
-        myRef_police = database_policeIncharge.getReference("police_details");
+        myRef_police = database_policeIncharge.getReference("user_details/");
 
         //getReference hi police_details hi dah ve ve angai.
-        myRef_police.orderByChild("police_details").addChildEventListener(new ChildEventListener() {
+        myRef_police.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                //  Log.v("tag",""+dataSnapshot);
-                String officerTemp = String.valueOf(dataSnapshot.child("name").getValue());
-                String key = (String) dataSnapshot.getKey();
-                Log.v("tag","name: "+ officerTemp);
+
+              Log.i("TAG/police name","gee:"+dataSnapshot.getValue())  ;
+             // Object obj = dataSnapshot.getValue();
+
+
+                Map<String, String> td = (HashMap<String,String>) dataSnapshot.getValue();
+
+                if(td.get("role").equals("verifier")){
+                    policeName.add(td.get("name"));
+                    policeNameKey.add(dataSnapshot.getKey());
+                }
+                // noty = dataSnapshot.getValue(NotificationEntity.class);
+
+             Log.i("TAG/police name","role:"+td.get("role"));
 
                 //  policeName[]
-                policeName.add(officerTemp);
-                policeNameKey.add(key);
+                //policeName.add(officerTemp);
+                //policeNameKey.add(key);
 
             }
 
@@ -432,6 +455,11 @@ public class MainActivity extends AppCompatActivity {
         Toasty.success(this,"Log out!",Toasty.LENGTH_SHORT).show();
         startActivity(new Intent(this, FireBasePhoneAuth.class));
 
+    }
+
+    public void policeReportClick(View view) {
+
+        startActivity(new Intent(this, PoliceIncharge.class));
     }
 }
 

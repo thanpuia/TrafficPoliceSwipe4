@@ -24,11 +24,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.borjabravo.readmoretextview.ReadMoreTextView;
+import com.example.lalthanpuia.trafficpoliceswipe4.AdminFeedActivity;
 import com.example.lalthanpuia.trafficpoliceswipe4.ItemFiveActivity;
+import com.example.lalthanpuia.trafficpoliceswipe4.MainActivity;
 import com.example.lalthanpuia.trafficpoliceswipe4.R;
 import com.example.lalthanpuia.trafficpoliceswipe4.entity.NotificationEntity;
 import com.google.firebase.storage.FirebaseStorage;
@@ -42,8 +45,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
     StorageReference storageReference = FirebaseStorage.getInstance().getReference();
     ArrayList<NotificationEntity> notificationEntities;
 
-    Context c;
-
     String fromWhere;
 
     Bitmap bitmap;
@@ -56,9 +57,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
 
     }
 
-    public MyAdapter(ArrayList<NotificationEntity> myNoti) {
+    public MyAdapter(ArrayList<NotificationEntity> myNoti, String from) {
 
         notificationEntities = myNoti;
+        fromWhere = from;
 
     }
 
@@ -82,6 +84,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
 
             holder.dateTV.setText(dateList.get(position).toString());
             holder.messageTV.setText(messageList.get(position).toString());*/
+            holder.changeStatusButton.setVisibility(View.GONE);
+
             holder.senderName.setText(notificationEntities.get(position).getSender_name());
             holder.title.setText(notificationEntities.get(position).getTitle());
             holder.myBody.setText(notificationEntities.get(position).getMessage());
@@ -214,11 +218,14 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
         ImageView imageView;
         ImageView mapIV;
         CardView cardView;
+        Context context;
+        Button changeStatusButton;
 
         TextView police_incharge;
 
         public MyHolder(final View itemView) {
             super(itemView);
+            context = itemView.getContext();
 
            // this.nametxt= (TextView) itemView.findViewById(R.id.nameTxt);
             this.title=  itemView.findViewById(R.id.titleTextViewAdmin);
@@ -231,17 +238,21 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
             this.mapIV = itemView.findViewById(R.id.mapIV);
             this.cardView = itemView.findViewById(R.id.cardView);
             this.police_incharge = itemView.findViewById(R.id.police_incharge);
+            this.changeStatusButton = itemView.findViewById(R.id.changeStatusButton);
+            if(fromWhere.equals("admin")){
+                itemView.setOnClickListener(this);
+            }
 
-         //   if(fromWhere.equals("paginator")){
-        //        itemView.setOnClickListener(this);
-         //   }
         }
 
         @Override
         public void onClick(View view) {
 
             int position = getAdapterPosition();
-            Intent intent = new Intent(view.getContext(), ItemFiveActivity.class);
+            Intent intent = new Intent(context, ItemFiveActivity.class);
+            String notification_ids = AdminFeedActivity.NOTIFICATION_IDS.get(position);
+
+            intent.putExtra("notification_id",notification_ids);
 
             /*intent.putExtra("message",messageList.get(position));
             intent.putExtra("downloadUrl",downloadURLList.get(position));
@@ -254,7 +265,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
 
             intent.putExtra("police_incharge",police_inchargeList.get(position));*/
 
-            c.startActivity(intent);
+            context.startActivity(intent);
         }
     }
 }

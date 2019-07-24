@@ -34,6 +34,8 @@ import static android.support.constraint.Constraints.TAG;
 
 public class AdminFeedActivity extends AppCompatActivity {
 
+    public static ArrayList<String> NOTIFICATION_IDS;
+
     FirebaseDatabase database;
     DatabaseReference myRef;
     public static LocationManager locationManager;
@@ -59,6 +61,7 @@ public class AdminFeedActivity extends AppCompatActivity {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         shared_uid = sharedPreferences.getString("uid","");
 
+        NOTIFICATION_IDS = new ArrayList<>();
 
         notificationEntity = new NotificationEntity();
         notificationEntities = new ArrayList<>();
@@ -79,6 +82,8 @@ public class AdminFeedActivity extends AppCompatActivity {
                 notificationEntity = dataSnapshot.getValue(NotificationEntity.class);
 
                 notificationEntities.add(notificationEntity);
+
+                NOTIFICATION_IDS.add(dataSnapshot.getKey());
                 String name = (String) dataSnapshot.child("sender_name").getValue();
                 Log.i("TAG/adminfeed","sender_name:"+name);
                 //myAdapter = new MyAdapter(notificationEntity);
@@ -96,7 +101,7 @@ public class AdminFeedActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                myAdapter = new MyAdapter(notificationEntities);
+                myAdapter = new MyAdapter(notificationEntities, "admin");
                 recyclerView.setAdapter(myAdapter);
                 Log.i("TAG/admin feed","finsiher!");
             }

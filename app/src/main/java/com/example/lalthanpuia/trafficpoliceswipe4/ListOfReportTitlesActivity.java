@@ -12,7 +12,13 @@ import android.widget.HorizontalScrollView;
 import android.widget.ListView;
 
 import com.google.firebase.database.core.Repo;
-
+/*
+*
+*
+* //TODO : THIS IS SOMEWHAT OF A HELPER CLASS FOR THE TITLE LIST
+*
+*
+* */
 public class ListOfReportTitlesActivity extends AppCompatActivity {
 
 
